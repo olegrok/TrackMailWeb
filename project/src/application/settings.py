@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Django settings for application project.
 
@@ -27,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# User model definition
+AUTH_USER_MODEL = 'core.User'
 
 # Application definition
 
@@ -37,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
+    'likes',
+    'photos',
+    'comments',
 ]
 
 MIDDLEWARE = [
