@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+<b><p>{% block title %}{{ photo.author }}{% endblock %}</p></b>
+
+
+
+{% block content %}
+    <img src="{{ photo.photo.url }}" width="500px"> </br>
+    <i> <p>{{ photo.description }}</p> </i>
+
+    {{ photo.pub_date|date:"d-m-y" }}<br>
+
+    <p>Likes = {{ photo.count_likes }}</p>
+
+    {%if photo.get_comments.all %}
+    <h1> Comments: </h1> <br>
+
+    {% for comment in photo.get_comments.all %}
+        <b>{{comment.author.username}}:  </b> <br>
+        <p>{{comment.text}}</p>
+        <i>{{comment.pub_date}}</i> <br><br>
+    {% endfor %}
+    {%endif%}
+
+{% endblock %}
+</body>
+</html>

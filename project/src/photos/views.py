@@ -6,13 +6,14 @@ from django.views.generic import ListView
 from .models import Photo
 
 class PhotoList(ListView):
-    temlate_name = 'photos/list.html'
-    model = Photo('photos/templates/photos/list.html')
+    template_name = 'photos_list.html'
+    context_object_name = 'photo'
+    model = Photo
 
 class PhotoView(DetailView):
+    model = Photo
     template_name = "photo.html"
     context_object_name = 'photo'
 
 def show_photo(request, photos_id=0):
-    return render(request, 'detailed.html', {"photos_id" : photos_id})
-
+    return render(request, 'detailed_template.html', {"photos_id" : photos_id})

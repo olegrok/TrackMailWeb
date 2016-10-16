@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Список фотографий{% endblock %}
+
+{% block content %}
+{% for photo in object_list %}
+    <p>
+    <b>{{photo.author}}</b>
+    <a href = "../{{photo.id}}/">
+    <div><img src="{{ photo.photo.url }}" width="500px"></div>
+    </a>
+    <br> <br>
+    <div align="right">{{photo.pub_date}}</div> <br>
+    </p>
+
+{% endfor %}
+{% endblock %}
