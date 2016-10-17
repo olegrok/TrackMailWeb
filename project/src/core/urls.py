@@ -4,5 +4,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^$', home, name='home'),
-    url(r'^users/(?P<pk>\d+)/$', UserView.as_view(), name="user"),
+    #todo
+    url(r'^users/(?P<slug>\w+)/$', UserView.as_view(), name="user"),
 ]

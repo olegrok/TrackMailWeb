@@ -4,7 +4,7 @@
 {% block content %}
 {% for photo in object_list %}
     <p>
-    <b>{{photo.author}}</b>
+    <a href="./../../users/{{photo.author}}"> <b>{{photo.author}}</b> </a>
     <a href = "../{{photo.id}}/">
     <div><img src="{{ photo.photo.url }}" width="500px"></div>
     </a>
