@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}{% endblock %}
+
+<body>
+    {% block content %}
+        {%  if user.avatar %}
+            <img src = '{{ user.avatar.url }}' width="200px"> <br>
+        {% endif %}
+        <b>Username: </b> {{ user.username }} <br>
+        <b>Name: </b> {{ user.last_name }} {{ user.first_name }}
+    {%endblock%}
+
+</body>

@@ -8,9 +8,11 @@
     <img src="{{ photo.photo.url }}" width="500px"> </br>
     <i> <p>{{ photo.description }}</p> </i>
 
-    {{ photo.pub_date|date:"d-m-y" }}<br>
+    {{ photo.pub_date|time:"H:i" }} {{ photo.pub_date|date:"d.m.y" }}<br>
 
     <p>Likes = {{ photo.count_likes }}</p>
+
+    {%if photo.category %}<center> <b> Category: </b>{{ photo.category }} </center>{%endif%}
 
     {%if photo.get_comments.all %}
     <h1> Comments: </h1> <br>
@@ -23,5 +25,3 @@
     {%endif%}
 
 {% endblock %}
-</body>
-</html>

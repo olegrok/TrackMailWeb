@@ -9,6 +9,20 @@ class Photo(models.Model):
     description = models.TextField(max_length=1024, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    CATEGORIES = (
+        ('Life', 'life'),
+        ('Nature', 'nature'),
+        ('Culture', 'culture'),
+        ('Sciense', 'science' ),
+        ('Space', 'space'),
+        ('News', 'news'),
+        ('Humor', 'humor' ),
+        ('Information Technology', 'IT' )
+    )
+
+    category = models.CharField(blank='True', choices=CATEGORIES, max_length=1024)
+
     class Meta:
         verbose_name = u'Фотокарточка'
         verbose_name_plural = u'Фотокарточки'
