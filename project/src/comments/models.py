@@ -8,3 +8,6 @@ class Comment(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments')
     pub_date = models.DateTimeField(auto_now_add=True)
     ordering = ('-created_at',)
+
+    def __str__(self):
+        return '{} by {}'.format(self.photo.id, self.author)

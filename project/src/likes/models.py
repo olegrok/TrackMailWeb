@@ -9,3 +9,6 @@ class Like(models.Model):
     photo = models.ForeignKey('photos.Photo', related_name='likes')
     class Meta:
         unique_together = (('author', 'photo'),)
+
+    def __str__(self):
+        return '%i by %s' % (self.photo.id, self.author)

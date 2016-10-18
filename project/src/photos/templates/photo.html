@@ -5,7 +5,7 @@
 
 
 {% block content %}
-    <img src="{{ photo.photo.url }}" width="500px"> </br>
+    <img src="{{ photo.get_file_url }}" width="500px"> </br>
     <p><i>{{ photo.description }}  </i> by <a href="{{photo.author.get_absolute_url}}"> {{ photo.author }} </a> </p>
 
     {{ photo.pub_date|time:"H:i" }} {{ photo.pub_date|date:"d.m.y" }}<br>
@@ -18,7 +18,7 @@
     <h1> Comments: </h1> <br>
 
     {% for comment in photo.get_comments.all %}
-        <b> <a href={{comment.author.get_absolute_url}}"> {{comment.author.username}}</a>:  </b>  <br>
+        <b> <a href="{{comment.author.get_absolute_url}}"> {{comment.author.username}}</a>:  </b>  <br>
         <p>{{comment.text}}</p>
         <i>{{comment.pub_date}}</i> <br><br>
     {% endfor %}

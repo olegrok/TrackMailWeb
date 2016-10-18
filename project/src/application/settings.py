@@ -125,12 +125,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 #BASE_DIR = 'project/src/'
-
 STATIC_URL = '/static/'
-#STATIC_ROOT = '/home/oleg/Web/project/collected_static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'collected_static/')
-#STATICFILES_DIRS = ('/home/oleg/Web/project/src/static/', )
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'), )
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media/')
+
+'''ABSOLUTE_URL_OVERRIDES = {
+    'core.user': lambda o: "/users/%s/" % o.username,
+    'photos.photo': lambda o: "/photos/%d/" % o.id,
+}'''

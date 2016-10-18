@@ -8,10 +8,13 @@ class User(AbstractUser):
     first_name = models.CharField(('first name'), max_length=30, blank=False)
     email = models.EmailField(('E-mail address'), blank=False, unique=True)
 
-    #@models.permalink
     def get_absolute_url(self):
-        #print(("user.view", [self.username]))
+        from django.urls import reverse
+        #return reverse('users-user', kwargs={'pk': self.pk, "slug":self.username})#, args=[str(self.username)])
+        #return ('users.view.user', [str(self.id)])
         #return "user.view" % self.username
+        #print(reverse('core.views.user', (), {'slug': self.username}))
+        #return reverse('users.views.user', kwargs={'slug': self.username})
         return "/users/%s" % self.username
 
     def get_pubs(self):
