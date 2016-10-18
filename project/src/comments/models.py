@@ -1,13 +1,22 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
+from django.db.models import TextField, DateTimeField, ForeignKey, Model, PositiveIntegerField
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
-class Comment(models.Model):
-    text = models.TextField(max_length=1024)
-    photo = models.ForeignKey('photos.Photo', related_name='comments')
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='comments')
-    pub_date = models.DateTimeField(auto_now_add=True)
+
+class Comment(Model):
+
+    content_type = ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    comments = GenericRelation('comments.Comment', related_name = 'comments')
+
+    text = TextField(max_length=1024)
+    author = ForeignKey(settings.AUTH_USER_MODEL, related_name='comments')
+    pub_date = DateTimeField(auto_now_add=True)
     ordering = ('-created_at',)
 
     def __str__(self):
-        return '{} by {}'.format(self.photo.id, self.author)
+        return '%i by %s' % (self.content_object.id, self.author)
