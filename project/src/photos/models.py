@@ -8,7 +8,7 @@ class Photo(models.Model):
     photo = models.ImageField(upload_to='photos/', blank=False, null=False)
     description = models.TextField(max_length=1024, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='photos')
 
     CATEGORIES = (
         ('Life', 'life'),
@@ -23,6 +23,7 @@ class Photo(models.Model):
 
     category = models.CharField(blank='True', choices=CATEGORIES, max_length=1024)
 
+
     class Meta:
         verbose_name = u'Фотокарточка'
         verbose_name_plural = u'Фотокарточки'
@@ -32,4 +33,5 @@ class Photo(models.Model):
         return self.likes.count()
     def get_comments(self):
         return self.comments
-
+    def get_absolute_url(self):
+        return '/photos/%i/' % self.id

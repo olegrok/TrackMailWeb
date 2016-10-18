@@ -9,6 +9,16 @@
         {% endif %}
         <b>Username: </b> {{ user.username }} <br>
         <b>Name: </b> {{ user.last_name }} {{ user.first_name }}
+        <br> <br>
+        {% if user.get_pubs.all %}
+            <b>Posts: </b> <br>
+            <p>
+                {%  for photo in user.get_pubs.all %}
+                    <a href="{{ photo.get_absolute_url }}"> {{ photo.pub_date|date:'d.m.y' }} </a> <br>
+                {% endfor %}
+            </p>
+        {% endif %}
+
     {%endblock%}
 
 </body>
