@@ -1,27 +1,52 @@
 {% extends "base.html" %}
 
-<b><p>{% block title %}{{ photo.author }}{% endblock %}</p></b>
+{% block title %}{{ photo.author }}{% endblock %}
 
 
 
 {% block content %}
-    <img src="{{ photo.get_file_url }}" width="500px"> </br>
-    <p><i>{{ photo.description }}  </i> by <a href="{{photo.author.get_absolute_url}}"> {{ photo.author }} </a> </p>
 
-    {{ photo.pub_date|time:"H:i" }} {{ photo.pub_date|date:"d.m.y" }}<br>
+    {% if form.errors %}
+        <h3>Комментарий не опубликован. Исправьте ошибки:</h3>
+        {{ form.errors }}
+    {% endif %}
+
+    <img src="{{ photo.get_file_url }}" width="500px"> </br>
+    <p><i>{{ photo.description }}  </i> by <a href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></p>
+
+    {{ photo.pub_date|time:'H:i' }} {{ photo.pub_date|date:"d.m.y" }}<br>
 
     <p>Likes = {{ photo.count_likes }}</p>
 
-    {%if photo.category %}<center> <b> Category: </b>{{ photo.category }} </center>{%endif%}
+    {% if photo.category %}
+        <center><b> Category: </b>{{ photo.category }} </center>{% endif %}
 
-    {%if photo.get_comments.all %}
-    <h1> Comments: </h1> <br>
+    {% if photo.get_comments.all %}
+        <h1> Comments: </h1> <br>
 
-    {% for comment in photo.get_comments.all %}
-        <b> <a href="{{comment.author.get_absolute_url}}"> {{comment.author.username}}</a>:  </b>  <br>
-        <p>{{comment.text}}</p>
-        <i>{{comment.pub_date}}</i> <br><br>
-    {% endfor %}
-    {%endif%}
+        {% for comment in photo.get_comments.all %}
+            <b> <a href="{{ comment.author.get_absolute_url }}"> {{ comment.author.username }}</a>: </b>  <br>
+            <p>{{ comment.text }}</p>
+            <i>{{ comment.pub_date }}</i> <br><br>
+        {% endfor %}
+    {% endif %}
 
+    <form method="post">
+        {% csrf_token %}
+        {% if form.errors %}
+            {% for field_name, errorlist in form.errors.items %}
+                <div>Ошибки в поле {{ field_name }}: {% for error in errorlist %}{{ error }}{% endfor %}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <b>Добавить комментарий</b> <br>
+
+        {{ form.text }} <br>
+        <input type="submit" value="Send">
+
+        {% else %}
+        <b>Авторизуйтесь, чтобы добавлять комментарии</b>
+        {% endif %}
+    </form>
 {% endblock %}

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
@@ -16,7 +18,12 @@ class Comment(Model):
     text = TextField(max_length=1024)
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='comments')
     pub_date = DateTimeField(auto_now_add=True)
-    ordering = ('-created_at',)
+
+
+    class Meta:
+        ordering = ('-pub_date',)
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
 
     def __str__(self):
         return '%i by %s' % (self.content_object.id, self.author)

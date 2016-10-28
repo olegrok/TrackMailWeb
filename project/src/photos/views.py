@@ -1,18 +1,73 @@
-from django.shortcuts import render
+# coding: utf-8
+from django.shortcuts import render, get_object_or_404, reverse
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import HttpResponse, HttpResponseRedirect
-from django.views.generic import DetailView, ListView
+from django.http import QueryDict, request
+from django.views.generic import DetailView, ListView, CreateView
+from django.contrib.contenttypes.models import ContentTypeManager, ContentType
+
 
 from .models import Photo
+from comments.models import Comment
+from comments.forms import CommentForm
 
 class PhotoList(ListView):
     template_name = 'photos_list.html'
     context_object_name = 'photo'
     model = Photo
 
+#Кажется useless
+
+'''
 class PhotoView(DetailView):
     model = Photo
     template_name = "photo.html"
     context_object_name = 'photo'
 
-def show_photo(request, photos_id=0):
-    return render(request, 'detailed_template.html', {"photos_id" : photos_id})
+    def get_context_data(self, **kwargs):
+        context = super(PhotoView, self).get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        return context
+
+
+
+class CreateCommentView(CreateView):
+    model = Comment
+    fields = ('text')
+
+    def get_success_url(self):
+        return reverse('photos:photo')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(CreateCommentView, self).form_valid(form)
+'''
+
+
+class PhotoDetail(CreateView):
+    model = Comment
+    template_name = 'photo.html'
+    fields = ('text', )
+    success_url = '.'
+
+    def dispatch(self, request, pk=None, *args, **kwargs):
+        self.photo = get_object_or_404(Photo, id=pk)
+        return super(PhotoDetail, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(PhotoDetail, self).get_context_data(**kwargs)
+        context['photo'] = self.photo
+        return context
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.content_type = ContentType.objects.get_for_model(Photo)
+        form.instance.object_id = self.photo.pk
+        return super(PhotoDetail, self).form_valid(form)
+
+    def get_success_url(self):
+        return '.'
+
+
+#def show_photo(request, photos_id=0):
+#    return render(request, 'detailed_template.html', {"photos_id" : photos_id})

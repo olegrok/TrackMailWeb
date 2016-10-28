@@ -135,3 +135,8 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media/')
     'core.user': lambda o: "/users/%s/" % o.username,
     'photos.photo': lambda o: "/photos/%d/" % o.id,
 }'''
+
+#Login settings
+LOGIN_REDIRECT_URL = "mainpage:home"
+LOGIN_URL = "mainpage:accounts"
+ACCOUNT_ACTIVATION_DAYS = 1
