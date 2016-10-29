@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit {% endblock %}
+
+{% block content %}
+    <img src='{{ photo.photo.url }}' width="500px">
+    <form method="post">
+        {{ form.description.errors }}
+        {{ form.description.label_tag }} <br> {{ form.description }} <br>
+        {{ form.category.errors }}
+        {{ form.category.label_tag }} <br> {{ form.category }} <br>
+
+        <input type="submit" value="Исправить">
+    </form>
+
+{% endblock %}

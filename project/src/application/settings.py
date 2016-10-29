@@ -138,5 +138,5 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media/')
 
 #Login settings
 LOGIN_REDIRECT_URL = "mainpage:home"
-LOGIN_URL = "mainpage:accounts"
+LOGIN_URL = "mainpage:login"
 ACCOUNT_ACTIVATION_DAYS = 1

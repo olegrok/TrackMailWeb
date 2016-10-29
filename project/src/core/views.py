@@ -17,31 +17,15 @@ class UserView(DetailView):
     context_object_name = 'user'
     slug_field = 'username'
 
-class UserCreate(CreateView):
+class RegisterView(CreateView):
     model = User
-    fields = ('')
-    #fields = RegistrationForm().fields
     template_name = 'registration/registration_form.html'
-    success_url = '/'
-
-    def get_context_data(self, **kwargs):
-        context = super(UserCreate, self).get_context_data(**kwargs)
-        context['form'] = RegistrationForm()
-        return context
-
-    def form_valid(self, form):
-        user = User.objects.create_user(
-            username=form.cleaned_data['username'],
-            password=form.cleaned_data['password1'],
-            email=form.cleaned_data['email'],
-            first_name=form.cleaned_data['first_name'],
-            last_name=form.cleaned_data['last_name'],
-            avatar=form.cleaned_data['avatar']
-        )
-        return super(UserCreate, self).form_valid(form)
+    form_class = RegistrationForm
+    success_url = 'mainpage:login'
 
     def get_success_url(self):
-        return '/'
+        from django.urls import reverse
+        return reverse(self.success_url)
 
 
 def register(request, template_name = 'registration/registration_form.html',

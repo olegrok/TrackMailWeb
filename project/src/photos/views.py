@@ -3,9 +3,8 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import HttpResponse, HttpResponseRedirect
 from django.http import QueryDict, request
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.contenttypes.models import ContentTypeManager, ContentType
-
 
 from .models import Photo
 from comments.models import Comment
@@ -68,6 +67,17 @@ class PhotoDetail(CreateView):
     def get_success_url(self):
         return '.'
 
+class CreatePhoto(CreateView):
+    model = Photo
+    template_name = 'create_photo.html'
+    fields = ('photo', 'description', 'category')
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(CreatePhoto, self).form_valid(form)
 
-#def show_photo(request, photos_id=0):
-#    return render(request, 'detailed_template.html', {"photos_id" : photos_id})
+
+class EditPhoto(UpdateView):
+    model = Photo
+    template_name = 'photo_edit.html'
+    fields = ('description', 'category')
