@@ -28,7 +28,7 @@ class RegisterView(CreateView):
         return reverse(self.success_url)
 
 
-def register(request, template_name = 'registration/registration_form.html',
+'''def register(request, template_name = 'registration/registration_form.html',
              redirect_field_name=None): #reverse('mainpage:register')
 
     if redirect_field_name == None:
@@ -50,7 +50,7 @@ def register(request, template_name = 'registration/registration_form.html',
             user.save()
             return redirect(redirect_field_name)
     return render(request, template_name, {'form':form})
-
+'''
 
 
 

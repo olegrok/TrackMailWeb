@@ -5,6 +5,7 @@ from django.db.models import ImageField, DateTimeField, TextField, ForeignKey, M
 from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
+from django.urls import reverse
 
 class Photo(Model):
     photo = ImageField(upload_to='photos/', blank=False, null=False)
@@ -34,12 +35,15 @@ class Photo(Model):
 
     def __str__(self):
         return str(self.id)
-    def count_likes(self):
-        return self.likes.count()
+    def likes(self):
+        return self.likes
     def get_comments(self):
         return self.comments
     def get_absolute_url(self):
-        from django.urls import reverse
         return reverse('photos:photo', args=[str(self.pk)])
+    def get_edit_url(self):
+        from django.urls import reverse
+        return reverse('photos:photo_edit', args=[str(self.pk)])
+
     def get_file_url(self):
         return self.photo.url

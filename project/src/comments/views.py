@@ -19,3 +19,10 @@ class PostComment(CreateView):
         context['post'] = self.post
         context['form'] = CommentForm()
         return context
+
+'''    def form_valid(self, form):
+        if self.user.is_anonymus:
+            raise form.ValidationError('You are not registred')
+            redirect('mainpage:login')
+        return super(PostComment, self).form_valid(form)
+'''

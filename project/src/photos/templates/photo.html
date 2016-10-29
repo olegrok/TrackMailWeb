@@ -16,7 +16,7 @@
 
     {{ photo.pub_date|time:'H:i' }} {{ photo.pub_date|date:"d.m.y" }}<br>
 
-    <p>Likes = {{ photo.count_likes }}</p>
+    <p>Likes = {{ photo.likes.count }}</p>
 
     {% if photo.category %}
         <center><b> Category: </b>{{ photo.category }} </center>{% endif %}

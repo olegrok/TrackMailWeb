@@ -4,10 +4,32 @@
     <title>{% block title %}Hello!{% endblock %}</title><br>
 </head>
 
+{# {% extends 'registration/login_panel.html' %} #}
+
+{% url 'mainpage:login' as login_url %}
+{% url 'mainpage:register' as register_url %}
+{% url 'mainpage:logout' as logout_url %}
+{% url 'photos:create_photo' as newphoto_url %}
+
+<right>
+    {% if user.is_anonymous %}
+        <a href='{{ login_url }}'}> Авторизация </a> <br>
+        <a href='{{ register_url_url }}'> Регистрация </a>
+    {% else %}
+        {% url 'users:user' slug=user.username as profile %}
+        Привет, <a href="{{ profile }}">{{ user.username }}</a> <br>
+        <a href="{{ newphoto_url }}"> Добавить фото </a> <br>
+        <a href="{{ logout_url }}"> Выйти из аккаунта </a> <br>
+    {% endif %}
+</right>
+
 
 <body>
 <a href="/"> <h1><i>PhToTo</i></h1> </a>
 
+
+
+{# {% extends 'registration/login_panel.html' %}  #}
     <div>
         {% block content %}{% endblock %}
     </div>

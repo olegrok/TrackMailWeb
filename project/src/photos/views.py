@@ -1,10 +1,9 @@
 # coding: utf-8
-from django.shortcuts import render, get_object_or_404, reverse
-from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import QueryDict, request
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.contenttypes.models import ContentTypeManager, ContentType
+from django.core.exceptions import ValidationError
 
 from .models import Photo
 from comments.models import Comment
@@ -59,6 +58,9 @@ class PhotoDetail(CreateView):
         return context
 
     def form_valid(self, form):
+        if self.request.user.is_anonymous():
+            #raise ValidationError('You are not registred')
+            return redirect('mainpage:login')
         form.instance.author = self.request.user
         form.instance.content_type = ContentType.objects.get_for_model(Photo)
         form.instance.object_id = self.photo.pk
