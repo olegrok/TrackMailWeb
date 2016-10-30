@@ -19,13 +19,16 @@ class PhotoList(ListView):
 
     def dispatch(self, request, *args, **kwargs):
         self.search_form = SearchForm(request.GET)
-        self.categories = Photo.CATEGORIES
         return super(PhotoList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = Photo.objects.all()
         if self.search_form.is_valid():
             queryset = queryset.filter(description__icontains=self.search_form.cleaned_data['search'])
+            if self.search_form['sort'].value():
+                queryset = queryset.order_by(self.search_form['sort'].value())
+            else:
+                queryset = queryset.order_by('-pub_date')
             return queryset
         return queryset
 
@@ -100,13 +103,15 @@ class CreatePhoto(CreateView):
     model = Photo
     template_name = 'create_photo.html'
     fields = ('photo', 'description', 'category')
-    
+
     def form_valid(self, form):
         form.instance.author = self.request.user
+        #print(dir(form.instance.photo))
+        #print(form.instance.photo)
         return super(CreatePhoto, self).form_valid(form)
 
     def get_success_url(self):
-        pass
+        return reverse('photos:photo', args=[str(self.get_form().instance.pk)])
 
 
 

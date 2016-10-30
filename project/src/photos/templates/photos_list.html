@@ -5,8 +5,8 @@
     <div align="center">
         <form> {% csrf_token %}
             {{ search_form.search.errors }}
-            {{ search_form.search.label_tag }} <br>
-            {{ search_form.search }}
+            {{ search_form.search.label_tag }} {{ search_form.search }} <br>
+            {{ search_form.sort.label_tag }} {{ search_form.sort }}
             <input type="submit" value="Искать">
         </form>
         {% if not object_list %}
