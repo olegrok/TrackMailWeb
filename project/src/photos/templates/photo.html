@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{ photo.author }}{% endblock %}
 
 
@@ -14,12 +15,17 @@
     <img src="{{ photo.get_file_url }}" width="500px"> </br>
     <p><i>{{ photo.description }}  </i> by <a href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></p>
 
-    {{ photo.pub_date|time:'H:i' }} {{ photo.pub_date|date:"d.m.y" }}<br>
+    {% url 'photos:photo_edit' pk=photo.id as edit_url %}
+    {{ photo.pub_date|time:'H:i' }} {{ photo.pub_date|date:"d.m.y" }} {% if user == photo.author %}
+    <a href="{{ edit_url }}">Edit</a> {% endif %}<br>
+
+
 
     <p>Likes = {{ photo.likes.count }}</p>
 
     {% if photo.category %}
-        <center><b> Category: </b>{{ photo.category }} </center>{% endif %}
+        <center><b> Category: </b>{{ photo.category }} </center>
+    {% endif %}
 
     {% if photo.get_comments.all %}
         <h1> Comments: </h1> <br>
@@ -31,7 +37,8 @@
         {% endfor %}
     {% endif %}
 
-    <form method="post">
+    {% if user.is_authenticated %}
+        <form method="post">
         {% csrf_token %}
         {% if form.errors %}
             {% for field_name, errorlist in form.errors.items %}
@@ -39,14 +46,14 @@
             {% endfor %}
         {% endif %}
 
-        {% if user.is_authenticated %}
+
         <b>Добавить комментарий</b> <br>
 
         {{ form.text }} <br>
         <input type="submit" value="Send">
 
-        {% else %}
+    {% else %}
         <b>Авторизуйтесь, чтобы добавлять комментарии</b>
-        {% endif %}
-    </form>
+    {% endif %}
+</form>
 {% endblock %}
