@@ -3,7 +3,7 @@
 
 {% block content %}
     <div align="center">
-        <form> {% csrf_token %}
+        <form>
             {{ search_form.search.errors }}
             {{ search_form.search.label_tag }} {{ search_form.search }} <br>
             {{ search_form.sort.label_tag }} {{ search_form.sort }}
@@ -16,9 +16,7 @@
 
 
     <div align="right">
-        {% url 'photos:list_category' slug='all' as url %}
-        <a href="{{ url }}"> All </a> <br>
-
+        <a href="{% url 'photos:list_category' slug='all' as url %}"> All </a> <br>
         {# {% for x, y in object_list.first.CATEGORIES %} #}
         {% for x, y in categories %}
             {% url 'photos:list_category' slug=y as url %}

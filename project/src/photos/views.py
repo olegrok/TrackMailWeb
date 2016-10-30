@@ -25,10 +25,7 @@ class PhotoList(ListView):
         queryset = Photo.objects.all()
         if self.search_form.is_valid():
             queryset = queryset.filter(description__icontains=self.search_form.cleaned_data['search'])
-            if self.search_form['sort'].value():
-                queryset = queryset.order_by(self.search_form['sort'].value())
-            else:
-                queryset = queryset.order_by('-pub_date')
+            queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
             return queryset
         return queryset
 
