@@ -44,6 +44,5 @@ class Photo(Model):
     def get_edit_url(self):
         from django.urls import reverse
         return reverse('photos:photo_edit', args=[str(self.pk)])
-
     def get_file_url(self):
         return self.photo.url

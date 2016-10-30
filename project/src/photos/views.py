@@ -1,4 +1,5 @@
 # coding: utf-8
+
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.http import QueryDict, request
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
@@ -9,26 +10,34 @@ from .models import Photo
 from comments.models import Comment
 from comments.forms import CommentForm
 
+
 class PhotoList(ListView):
+    model = Photo
     template_name = 'photos_list.html'
     context_object_name = 'photo'
-    model = Photo
+
+
+class PhotoCategoryView(PhotoList):
+    slug_field = 'category'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.category = kwargs['slug']
+        return super(PhotoCategoryView, self).dispatch(request, *args, **kwargs)
+    
+    
+    def get_queryset(self):
+        if self.category == 'all':
+            return Photo.objects.all()
+        for pair in self.model.CATEGORIES:
+            if self.category in pair:
+                self.category = pair[0]
+                break
+        return Photo.objects.filter(category=self.category)
+
 
 #Кажется useless
 
 '''
-class PhotoView(DetailView):
-    model = Photo
-    template_name = "photo.html"
-    context_object_name = 'photo'
-
-    def get_context_data(self, **kwargs):
-        context = super(PhotoView, self).get_context_data(**kwargs)
-        context['comment_form'] = CommentForm()
-        return context
-
-
-
 class CreateCommentView(CreateView):
     model = Comment
     fields = ('text')
@@ -59,7 +68,6 @@ class PhotoDetail(CreateView):
 
     def form_valid(self, form):
         if self.request.user.is_anonymous():
-            #raise ValidationError('You are not registred')
             return redirect('mainpage:login')
         form.instance.author = self.request.user
         form.instance.content_type = ContentType.objects.get_for_model(Photo)
@@ -78,8 +86,16 @@ class CreatePhoto(CreateView):
         form.instance.author = self.request.user
         return super(CreatePhoto, self).form_valid(form)
 
+    def get_success_url(self):
+        pass
+
+
+
 
 class EditPhoto(UpdateView):
     model = Photo
     template_name = 'photo_edit.html'
     fields = ('description', 'category')
+
+    def get_queryset(self):
+        return Photo.objects.filter(author=self.request.user)

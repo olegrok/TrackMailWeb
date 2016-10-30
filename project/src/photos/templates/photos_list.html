@@ -2,15 +2,26 @@
 {% block title %}Список фотографий{% endblock %}
 
 {% block content %}
-    {% for photo in object_list %}
-        <p>
-            <a href="{{ photo.author.get_absolute_url }}"> <b>{{ photo.author }}</b> </a>
-            <a href="{{ photo.get_absolute_url }}">
-                <div><img src="{{ photo.get_file_url }}" width="500px"></div>
-            </a>
-            <br> <br>
-        <div align="right">{{ photo.pub_date }}</div> <br>
-        </p>
 
-    {% endfor %}
+    <div align="right">
+        {% url 'photos:list_category' slug='all' as url %}
+        <a href="{{ url }}"> All </a> <br>
+        {% for x, y in object_list.first.CATEGORIES %}
+            {% url 'photos:list_category' slug=y as url %}
+            <a href="{{ url }}"> {{ x }} </a>  <br>
+        {% endfor %}
+    </div>
+
+    <div align="left">
+        {% for photo in object_list %}
+            <p>
+                <a href="{{ photo.author.get_absolute_url }}"> <b>{{ photo.author }}</b> </a>
+                <a href="{{ photo.get_absolute_url }}">
+                    <div><img src="{{ photo.get_file_url }}" width="500px"></div>
+                </a>
+                <br> <br>
+            <div align="right">{{ photo.pub_date }}</div> <br>
+            </p>
+        {% endfor %}
+    </div>
 {% endblock %}

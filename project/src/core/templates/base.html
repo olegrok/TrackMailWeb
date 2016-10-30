@@ -14,9 +14,9 @@
 <right>
     {% if user.is_anonymous %}
         <a href='{{ login_url }}'}> Авторизация </a> <br>
-        <a href='{{ register_url_url }}'> Регистрация </a>
+        <a href='{{ register_url }}'> Регистрация </a>
     {% else %}
-        {% url 'users:user' slug=user.username as profile %}
+        {% url 'mainpage:user' slug=user.username as profile %}
         Привет, <a href="{{ profile }}">{{ user.username }}</a> <br>
         <a href="{{ newphoto_url }}"> Добавить фото </a> <br>
         <a href="{{ logout_url }}"> Выйти из аккаунта </a> <br>
