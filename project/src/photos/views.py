@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentTypeManager, ContentType
 from django.core.exceptions import ValidationError
 
 from .models import Photo
+from .forms import SearchForm
 from comments.models import Comment
 from comments.forms import CommentForm
 
@@ -16,6 +17,24 @@ class PhotoList(ListView):
     template_name = 'photos_list.html'
     context_object_name = 'photo'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.search_form = SearchForm(request.GET)
+        self.categories = Photo.CATEGORIES
+        return super(PhotoList, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = Photo.objects.all()
+        if self.search_form.is_valid():
+            queryset = queryset.filter(description__icontains=self.search_form.cleaned_data['search'])
+            return queryset
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(PhotoList, self).get_context_data(**kwargs)
+        context['search_form'] = self.search_form
+        context['categories'] = Photo.CATEGORIES
+        return context
+
 
 class PhotoCategoryView(PhotoList):
     slug_field = 'category'
@@ -23,16 +42,16 @@ class PhotoCategoryView(PhotoList):
     def dispatch(self, request, *args, **kwargs):
         self.category = kwargs['slug']
         return super(PhotoCategoryView, self).dispatch(request, *args, **kwargs)
-    
-    
+
     def get_queryset(self):
+        queryset = super(PhotoCategoryView, self).get_queryset()
         if self.category == 'all':
-            return Photo.objects.all()
+            return queryset
         for pair in self.model.CATEGORIES:
             if self.category in pair:
                 self.category = pair[0]
                 break
-        return Photo.objects.filter(category=self.category)
+        return queryset.filter(category=self.category)
 
 
 #Кажется useless

@@ -11,9 +11,10 @@
 {% url 'mainpage:logout' as logout_url %}
 {% url 'photos:create_photo' as newphoto_url %}
 
-<right>
+<div align="right">
     {% if user.is_anonymous %}
-        <a href='{{ login_url }}'}> Авторизация </a> <br>
+        Вы не авторизованы <br>
+        <a href='{{ login_url }}'> Авторизация </a> <br>
         <a href='{{ register_url }}'> Регистрация </a>
     {% else %}
         {% url 'mainpage:user' slug=user.username as profile %}
@@ -21,11 +22,11 @@
         <a href="{{ newphoto_url }}"> Добавить фото </a> <br>
         <a href="{{ logout_url }}"> Выйти из аккаунта </a> <br>
     {% endif %}
-</right>
+</div>
 
 
 <body>
-<a href="/"> <h1><i>PhToTo</i></h1> </a>
+<a href="/"> <h1><i>Photyshestvie</i></h1> </a>
 
 
 
