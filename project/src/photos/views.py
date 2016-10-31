@@ -1,15 +1,12 @@
 # coding: utf-8
 
-from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.http import QueryDict, request
-from django.views.generic import DetailView, ListView, CreateView, UpdateView
-from django.contrib.contenttypes.models import ContentTypeManager, ContentType
-from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404, reverse, redirect
+from django.views.generic import ListView, CreateView, UpdateView
 
-from .models import Photo
-from .forms import SearchForm
 from comments.models import Comment
-from comments.forms import CommentForm
+from .forms import SearchForm
+from .models import Photo
 
 
 class PhotoList(ListView):
@@ -103,14 +100,10 @@ class CreatePhoto(CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        #print(dir(form.instance.photo))
-        #print(form.instance.photo)
         return super(CreatePhoto, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('photos:photo', args=[str(self.get_form().instance.pk)])
-
-
 
 
 class EditPhoto(UpdateView):

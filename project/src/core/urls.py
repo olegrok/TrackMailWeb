@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from .views import home, UserView, RegisterView
+from .views import home, UserView, RegisterView, UserEdit
 from django.contrib import admin
 from django.contrib.auth.views import login, logout, password_change
 from django.contrib.auth.decorators import login_required
@@ -17,4 +17,5 @@ urlpatterns = [
     #url(r'^accounts/register/$', register, {'template_name':'registration/registration_form.html'}, name='register'),
     url(r'^accounts/register/$', RegisterView.as_view(), name='register'),
     url(r'^users/(?P<slug>\w+)/$', login_required(UserView.as_view(), login_url=LOGIN_URL), name="user"),
+    url(r'^users/(?P<slug>\w+)/edit/$', login_required(UserEdit.as_view(), login_url=LOGIN_URL), name="user_edit"),
 ]
