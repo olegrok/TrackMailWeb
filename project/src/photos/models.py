@@ -14,7 +14,7 @@ class Photo(Model):
     pub_date = DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos', verbose_name='Автор')
     comments = GenericRelation('comments.Comment', related_query_name='comments', verbose_name='Отзывы')
-    category = ForeignKey(Category, related_name='photos', verbose_name='Категория', blank=True)
+    category = ForeignKey(Category, related_name='photos', verbose_name='Категория', blank=True, null=True)
 
 
     class Meta:
