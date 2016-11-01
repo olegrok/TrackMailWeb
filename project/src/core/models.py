@@ -8,13 +8,15 @@ from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 #https://docs.djangoproject.com/en/1.10/topics/auth/customizing/
 
 class User(AbstractUser):
-    avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
-    first_name = models.CharField(('first name'), max_length=30, blank=False)
-    email = models.EmailField(('E-mail address'), blank=False, unique=True)
+    avatar = models.ImageField(u'фото профиля',upload_to='avatars', blank=True, null=True)
+    first_name = models.CharField(u'имя', max_length=30, blank=False)
+    last_name = models.CharField(u'фамилия', max_length=30, blank=True)
+    email = models.EmailField(u'e-mail', blank=False, unique=True)
 
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
 
     def get_absolute_url(self):
         from django.urls import reverse
@@ -22,7 +24,4 @@ class User(AbstractUser):
 
     def get_pubs(self):
         return self.photos
-
-    #def create_user(self, username, password, email, first_name, second_name = None, avatar = None):
-    #    User.objects.create_user(username, email, password, first_name = first_name, second_name = second_name, avatar = avatar)
 

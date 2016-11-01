@@ -3,7 +3,7 @@
 from django import forms
 
 class CommentForm(forms.Form):
-    comment = forms.CharField(max_length=1024, widget=forms.Textarea)
+    comment = forms.CharField(max_length=1024, widget=forms.Textarea, label='Комментарий')
 
     def clean_text(self):
         text = self.cleaned_data['comment']

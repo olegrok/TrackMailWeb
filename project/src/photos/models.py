@@ -8,11 +8,11 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 
 class Photo(Model):
-    photo = ImageField(upload_to='photos/', blank=False, null=False)
-    description = TextField(max_length=1024, blank=True)
-    pub_date = DateTimeField(auto_now_add=True)
-    author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos')
-    comments = GenericRelation('comments.Comment', related_query_name='comments')
+    photo = ImageField(upload_to='photos/', blank=False, null=False, verbose_name='Фотокарточка')
+    description = TextField(max_length=1024, blank=True, verbose_name='Описание')
+    pub_date = DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
+    author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos', verbose_name='Автор')
+    comments = GenericRelation('comments.Comment', related_query_name='comments', verbose_name='Отзывы')
 
     CATEGORIES = (
         ('Life', 'life'),
@@ -25,7 +25,7 @@ class Photo(Model):
         ('Information Technology', 'IT' )
     )
 
-    category = models.CharField(blank='True', choices=CATEGORIES, max_length=1024)
+    category = models.CharField(blank='True', choices=CATEGORIES, max_length=1024, verbose_name='Категория')
 
 
     class Meta:
@@ -42,7 +42,6 @@ class Photo(Model):
     def get_absolute_url(self):
         return reverse('photos:photo', args=[str(self.pk)])
     def get_edit_url(self):
-        from django.urls import reverse
         return reverse('photos:photo_edit', args=[str(self.pk)])
     def get_file_url(self):
         return self.photo.url

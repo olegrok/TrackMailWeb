@@ -17,7 +17,6 @@
 
     <div align="right">
         <a href="{% url 'photos:list_category' slug='all' as url %}"> All </a> <br>
-        {# {% for x, y in object_list.first.CATEGORIES %} #}
         {% for x, y in categories %}
             {% url 'photos:list_category' slug=y as url %}
             <a href="{{ url }}"> {{ x }} </a>  <br>
@@ -32,7 +31,7 @@
                     <div><img src="{{ photo.get_file_url }}" width="500px"></div>
                 </a>
                 <br> <br>
-            <div align="right">{{ photo.pub_date }}</div> <br>
+            <div align="right">{{ photo.pub_date|date:'d M Y H:i' }}</div> <br>
             </p>
         {% endfor %}
 
