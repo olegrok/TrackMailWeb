@@ -16,7 +16,8 @@
 
 
     <div align="right">
-        <a href="{% url 'photos:list_category' slug='all' as url %}"> All </a> <br>
+        <a href="{% url 'photos:list_category' slug='all' %}"> All </a> <br>
+
         {% for x, y in categories %}
             {% url 'photos:list_category' slug=y as url %}
             <a href="{{ url }}"> {{ x }} </a>  <br>

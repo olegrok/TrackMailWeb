@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
+from categories.models import Category
 
 class Photo(Model):
     photo = ImageField(upload_to='photos/', blank=False, null=False, verbose_name='Фотокарточка')
@@ -13,19 +14,7 @@ class Photo(Model):
     pub_date = DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos', verbose_name='Автор')
     comments = GenericRelation('comments.Comment', related_query_name='comments', verbose_name='Отзывы')
-
-    CATEGORIES = (
-        ('Life', 'life'),
-        ('Nature', 'nature'),
-        ('Culture', 'culture'),
-        ('Sciense', 'science' ),
-        ('Space', 'space'),
-        ('News', 'news'),
-        ('Humor', 'humor' ),
-        ('Information Technology', 'IT' )
-    )
-
-    category = models.CharField(blank='True', choices=CATEGORIES, max_length=1024, verbose_name='Категория')
+    category = ForeignKey(Category, related_name='photos', verbose_name='Категория', blank=True)
 
 
     class Meta:

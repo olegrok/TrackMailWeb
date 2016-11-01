@@ -7,6 +7,8 @@
 
 {% block content %}
 
+
+
     {% if form.errors %}
         <h3>Комментарий не опубликован. Исправьте ошибки:</h3>
         {{ form.errors }}
@@ -22,9 +24,8 @@
 
 
     <p>Likes = {{ photo.likes.count }}</p>
-
     {% if photo.category %}
-        <center><b> Category: </b>{{ photo.category }} </center>
+        <div align="center"><b> Category: </b> <a href="{{ photo.category.get_absolute_url }}" >{{ photo.category }} </a> </div>
     {% endif %}
 
     {% if photo.get_comments.all %}

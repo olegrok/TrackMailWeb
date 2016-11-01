@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, reverse, redirect
 from django.views.generic import ListView, CreateView, UpdateView
 
 from comments.models import Comment
+from categories.models import Category
 from .forms import SearchForm
 from .models import Photo
 
@@ -29,7 +30,7 @@ class PhotoList(ListView):
     def get_context_data(self, **kwargs):
         context = super(PhotoList, self).get_context_data(**kwargs)
         context['search_form'] = self.search_form
-        context['categories'] = Photo.CATEGORIES
+        context['categories'] = Category.get_categories()
         return context
 
 
@@ -44,11 +45,10 @@ class PhotoCategoryView(PhotoList):
         queryset = super(PhotoCategoryView, self).get_queryset()
         if self.category == 'all':
             return queryset
-        for pair in self.model.CATEGORIES:
-            if self.category in pair:
-                self.category = pair[0]
-                break
-        return queryset.filter(category=self.category)
+
+        print(self.category)
+        print(queryset.filter(category__shortname=self.category))
+        return queryset.filter(category__shortname=self.category)
 
 
 #Кажется useless
