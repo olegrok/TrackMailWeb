@@ -9,9 +9,6 @@
             {{ search_form.sort.label_tag }} {{ search_form.sort }}
             <input type="submit" value="Искать">
         </form>
-        {% if not object_list %}
-                <h2>Ничего не найдено</h2>
-        {% endif %}
     </div>
 
 
@@ -34,7 +31,10 @@
                 <br> <br>
             <div align="right">{{ photo.pub_date|date:'d M Y H:i' }}</div> <br>
             </p>
+        {% empty %}
+            <h2>Ничего не найдено</h2>
         {% endfor %}
+
 
     </div>
 {% endblock %}

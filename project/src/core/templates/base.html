@@ -4,25 +4,7 @@
     <title>{% block title %}Hello!{% endblock %}</title><br>
 </head>
 
-{# {% extends 'registration/login_panel.html' %} #}
-
-{% url 'mainpage:login' as login_url %}
-{% url 'mainpage:register' as register_url %}
-{% url 'mainpage:logout' as logout_url %}
-{% url 'photos:create_photo' as newphoto_url %}
-
-<div align="right">
-    {% if user.is_anonymous %}
-        Вы не авторизованы <br>
-        <a href='{{ login_url }}'> Авторизация </a> <br>
-        <a href='{{ register_url }}'> Регистрация </a>
-    {% else %}
-        {% url 'mainpage:user' slug=user.username as profile %}
-        Привет, <a href="{{ profile }}">{{ user.username }}</a> <br>
-        <a href="{{ newphoto_url }}"> Добавить фото </a> <br>
-        <a href="{{ logout_url }}"> Выйти из аккаунта </a> <br>
-    {% endif %}
-</div>
+ {% include 'registration/login_panel.html' %}
 
 
 <body>

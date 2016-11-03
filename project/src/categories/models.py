@@ -6,8 +6,9 @@ from django.urls import reverse
 
 class Category(Model):
     title = CharField(max_length=40, verbose_name=u'Название', blank=False)
-    shortname = CharField(max_length=15, verbose_name=u'Обозначение', blank=False)
+    slug_field = CharField(max_length=15, verbose_name=u'Обозначение', blank=False)
     description = TextField(max_length=1024, verbose_name=u'Описание', blank=True)
+
 
     class Meta:
         verbose_name = u'Категория'
@@ -17,10 +18,10 @@ class Category(Model):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse('photos:list_category', args=[str(self.shortname)])
+        return reverse('photos:list_category', args=[str(self.slug_field)])
 
     @staticmethod
     def get_categories():
-        return [(category.title, category.shortname) for category in Category.objects.all()]
+        return [(category.title, category.slug_field) for category in Category.objects.all()]
 
 

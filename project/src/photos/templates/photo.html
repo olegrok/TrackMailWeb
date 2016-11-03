@@ -47,10 +47,10 @@
             {% endfor %}
         {% endif %}
 
-
         <b>Добавить комментарий</b> <br>
 
-        {{ form.text }} <br>
+        {{ comment_form.label_tag }} <br>
+        {{ comment_form.comment }} <br>
         <input type="submit" value="Send">
 
     {% else %}

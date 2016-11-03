@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 from django.db.models import ImageField, DateTimeField, TextField, ForeignKey, Model
 from django.conf import settings
-from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from categories.models import Category
@@ -15,7 +14,6 @@ class Photo(Model):
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos', verbose_name='Автор')
     comments = GenericRelation('comments.Comment', related_query_name='comments', verbose_name='Отзывы')
     category = ForeignKey(Category, related_name='photos', verbose_name='Категория', blank=True, null=True)
-
 
     class Meta:
         verbose_name = u'Фотокарточка'

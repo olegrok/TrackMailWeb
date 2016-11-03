@@ -15,8 +15,8 @@ class Comment(Model):
     content_object = GenericForeignKey('content_type', 'object_id')
     comments = GenericRelation('comments.Comment', related_name = 'comments')
 
-    text = TextField(max_length=1024, verbose_name='Комментарий')
-    author = ForeignKey(settings.AUTH_USER_MODEL, related_name='comments', verbose_name='Автор')
+    text = TextField(blank=False, max_length=1024, verbose_name='Комментарий')
+    author = ForeignKey(settings.AUTH_USER_MODEL, blank=False, related_name='comments', verbose_name='Автор')
     pub_date = DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
 
 

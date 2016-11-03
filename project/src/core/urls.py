@@ -14,7 +14,6 @@ urlpatterns = [
         login_required(password_change, login_url=LOGIN_URL),{'template_name':'registration/password_change.html', 'post_change_redirect':'/'},
         name='password_change'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    #url(r'^accounts/register/$', register, {'template_name':'registration/registration_form.html'}, name='register'),
     url(r'^accounts/register/$', RegisterView.as_view(), name='register'),
     url(r'^users/(?P<slug>\w+)/$', login_required(UserView.as_view(), login_url=LOGIN_URL), name="user"),
     url(r'^users/(?P<slug>\w+)/edit/$', login_required(UserEdit.as_view(), login_url=LOGIN_URL), name="user_edit"),

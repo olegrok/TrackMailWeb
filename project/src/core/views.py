@@ -40,33 +40,5 @@ class RegisterView(CreateView):
     def get_success_url(self):
         return reverse(self.success_url)
 
-
-'''def register(request, template_name = 'registration/registration_form.html',
-             redirect_field_name=None): #reverse('mainpage:register')
-
-    if redirect_field_name == None:
-        redirect_field_name = reverse('mainpage:login')
-
-    form = RegistrationForm(data=request.POST or None, files=request.FILES or None)
-    if request.method == 'POST':
-        form = RegistrationForm(data=request.POST, files=request.FILES or None)
-        if form.is_valid():
-            data = form.cleaned_data
-            user = User.objects.create_user(
-                username=data['username'],
-                email=data['email'],
-                password=data['password1']
-            )
-            user.first_name = data['first_name']
-            user.last_name = data['last_name']
-            user.avatar = data['avatar']
-            user.save()
-            return redirect(redirect_field_name)
-    return render(request, template_name, {'form':form})
-'''
-
-
-
-
 def home(request):
     return render(request, 'home.html')

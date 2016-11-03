@@ -2,8 +2,12 @@
 
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, reverse, redirect
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
+from application.settings import LOGIN_URL
+from comments.forms import CommentForm
 from comments.models import Comment
 from categories.models import Category
 from .forms import SearchForm
@@ -24,7 +28,6 @@ class PhotoList(ListView):
         if self.search_form.is_valid():
             queryset = queryset.filter(description__icontains=self.search_form.cleaned_data['search'])
             queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
-            return queryset
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -45,53 +48,40 @@ class PhotoCategoryView(PhotoList):
         queryset = super(PhotoCategoryView, self).get_queryset()
         if self.category == 'all':
             return queryset
-
-        print(self.category)
-        print(queryset.filter(category__shortname=self.category))
-        return queryset.filter(category__shortname=self.category)
+        return queryset.filter(category__slug_field=self.category)
 
 
-#Кажется useless
-
-'''
-class CreateCommentView(CreateView):
-    model = Comment
-    fields = ('text')
-
-    def get_success_url(self):
-        return reverse('photos:photo')
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super(CreateCommentView, self).form_valid(form)
-'''
+#####################################
 
 
-class PhotoDetail(CreateView):
-    model = Comment
+class PhotoDetail(DetailView):
+    model = Photo
+    context_object_name = 'photo'
     template_name = 'photo.html'
-    fields = ('text', )
     success_url = '.'
 
-    def dispatch(self, request, pk=None, *args, **kwargs):
-        self.photo = get_object_or_404(Photo, id=pk)
+    def dispatch(self, request, *args, **kwargs):
+        self.comment_form = CommentForm
         return super(PhotoDetail, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(PhotoDetail, self).get_context_data(**kwargs)
-        context['photo'] = self.photo
+        context['comment_form'] = self.comment_form
         return context
 
-    def form_valid(self, form):
-        if self.request.user.is_anonymous():
-            return redirect('mainpage:login')
-        form.instance.author = self.request.user
-        form.instance.content_type = ContentType.objects.get_for_model(Photo)
-        form.instance.object_id = self.photo.pk
-        return super(PhotoDetail, self).form_valid(form)
-
-    def get_success_url(self):
-        return '.'
+    def post(self, request, *args, **kwargs):
+        if request.user.is_anonymous:
+            redirect('mainpage:login')
+        self.object = self.get_object()
+        form = self.comment_form(request.POST)
+        if form.is_valid():
+            comment = Comment()
+            comment.author = request.user
+            comment.text = form.cleaned_data['comment']
+            comment.content_type = ContentType.objects.get_for_model(self.model)
+            comment.object_id = self.object.pk
+            comment.save()
+        return HttpResponseRedirect(self.success_url)
 
 class CreatePhoto(CreateView):
     model = Photo
@@ -103,7 +93,7 @@ class CreatePhoto(CreateView):
         return super(CreatePhoto, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('photos:photo', args=[str(self.get_form().instance.pk)])
+        return reverse('photos:photo', args=[str(self.object.pk)])
 
 
 class EditPhoto(UpdateView):

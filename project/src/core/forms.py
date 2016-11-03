@@ -16,7 +16,6 @@ class RegistrationForm(UserCreationForm):
         raise forms.ValidationError("The username already exists. Please try another one.")
 
     def clean_email(self):
-        print(self.cleaned_data['email'])
         try:
             User.objects.get(email__iexact=self.cleaned_data['email'])
         except User.DoesNotExist:
