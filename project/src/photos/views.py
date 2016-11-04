@@ -1,10 +1,9 @@
 # coding: utf-8
-
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, reverse, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import redirect_to_login
 
 from application.settings import LOGIN_URL
 from comments.forms import CommentForm
@@ -16,7 +15,7 @@ from .models import Photo
 
 class PhotoList(ListView):
     model = Photo
-    template_name = 'photos_list.html'
+    template_name = 'photos/photos_list.html'
     context_object_name = 'photo'
 
     def dispatch(self, request, *args, **kwargs):
@@ -51,16 +50,14 @@ class PhotoCategoryView(PhotoList):
         return queryset.filter(category__slug_field=self.category)
 
 
-#####################################
-
-
 class PhotoDetail(DetailView):
     model = Photo
     context_object_name = 'photo'
-    template_name = 'photo.html'
+    template_name = 'photos/photo.html'
     success_url = '.'
 
     def dispatch(self, request, *args, **kwargs):
+        self.user = request.user
         self.comment_form = CommentForm
         return super(PhotoDetail, self).dispatch(request, *args, **kwargs)
 
@@ -70,10 +67,10 @@ class PhotoDetail(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_anonymous:
-            redirect('mainpage:login')
         self.object = self.get_object()
         form = self.comment_form(request.POST)
+        if request.user.is_anonymous():
+            return redirect_to_login(next=reverse('photos:photo', args=[str(self.object.pk)]), login_url=LOGIN_URL)
         if form.is_valid():
             comment = Comment()
             comment.author = request.user
@@ -85,7 +82,7 @@ class PhotoDetail(DetailView):
 
 class CreatePhoto(CreateView):
     model = Photo
-    template_name = 'create_photo.html'
+    template_name = 'photos/create_photo.html'
     fields = ('photo', 'description', 'category')
 
     def form_valid(self, form):
@@ -98,7 +95,7 @@ class CreatePhoto(CreateView):
 
 class EditPhoto(UpdateView):
     model = Photo
-    template_name = 'photo_edit.html'
+    template_name = 'photos/photo_edit.html'
     fields = ('description', 'category')
 
     def get_queryset(self):

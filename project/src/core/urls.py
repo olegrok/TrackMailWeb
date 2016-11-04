@@ -9,9 +9,11 @@ from application.settings import LOGIN_URL
 urlpatterns = [
     url(r'^$', home, name='home'),
     url(r'^accounts/logout/$', login_required(logout, login_url=LOGIN_URL), {'next_page' : '/'}, name='logout'),
-    url(r'^accounts/login/$', login, name='login'),
+    url(r'^accounts/login/$', login,{'template_name' : 'core/registration/login.html',
+                                     'redirect_authenticated_user': True,
+                                     }, name='login'),
     url(r'^accounts/password_change/$',
-        login_required(password_change, login_url=LOGIN_URL),{'template_name':'registration/password_change.html', 'post_change_redirect':'/'},
+        login_required(password_change, login_url=LOGIN_URL),{'template_name':'core/registration/password_change.html', 'post_change_redirect':'/'},
         name='password_change'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts/register/$', RegisterView.as_view(), name='register'),

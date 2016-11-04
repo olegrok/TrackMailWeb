@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
 from .models import User
+from django.contrib.auth.forms import AuthenticationForm
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -29,3 +30,5 @@ class RegistrationForm(UserCreationForm):
         return self.cleaned_data
 
 
+# class AuthForm(AuthenticationForm):
+#     pass

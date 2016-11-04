@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}Hello!{% endblock %}</title>
+</head>
+
+<body>
+<a href="/"><h1><i>Photyshestvie</i></h1></a>
+
+{% include 'core/registration/login_panel.html' %}
+
+<div>
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+<!--<h1>END</h1> -->
+
+
+</html>

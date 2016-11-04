@@ -3,11 +3,23 @@
 {% url 'mainpage:logout' as logout_url %}
 {% url 'photos:create_photo' as newphoto_url %}
 
+
 <div align="right">
     {% if user.is_anonymous %}
+        <span style="float: left;">
+        <form action="{% url 'mainpage:login' %}" method="post" next='{{ request.path }}'> {% csrf_token %}
+            {{ authform.label }}
+            {{ authform.errors.all }}
+            {{ authform }}
+            <input type="hidden" id='id_next' name='next' value='{{ request.path }}'>
+            <input type="submit" value="Войти">
+        </form>
+        </span>
+        <span style="float: right;">
         Вы не авторизованы <br>
         <a href='{{ login_url }}'> Авторизация </a> <br>
         <a href='{{ register_url }}'> Регистрация </a>
+        </span> <br> <br> <br> <br>
     {% else %}
         {% url 'mainpage:user' slug=user.username as profile %}
         Привет, <a href="{{ profile }}">{{ user.username }}</a> <br>

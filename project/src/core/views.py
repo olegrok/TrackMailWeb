@@ -13,7 +13,7 @@ from .forms import RegistrationForm
 
 class UserView(DetailView):
     model = User
-    template_name = 'user.html'
+    template_name = 'core/user.html'
     slug_field = 'username'
     context_object_name = 'user_account'
     
@@ -24,7 +24,7 @@ class UserView(DetailView):
 
 class UserEdit(UpdateView):
     model = User
-    template_name = 'user_edit.html'
+    template_name = 'core/user_edit.html'
     fields = ('email', 'first_name', 'last_name', 'avatar')
     slug_field = 'username'
 
@@ -33,7 +33,7 @@ class UserEdit(UpdateView):
 
 class RegisterView(CreateView):
     model = User
-    template_name = 'registration/registration_form.html'
+    template_name = 'core/registration/registration_form.html'
     form_class = RegistrationForm
     success_url = 'mainpage:login'
 
@@ -41,4 +41,4 @@ class RegisterView(CreateView):
         return reverse(self.success_url)
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'core/home.html')
