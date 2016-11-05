@@ -18,5 +18,5 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts/register/$', RegisterView.as_view(), name='register'),
     url(r'^users/(?P<slug>\w+)/$', login_required(UserView.as_view(), login_url=LOGIN_URL), name="user"),
-    url(r'^users/(?P<slug>\w+)/edit/$', login_required(UserEdit.as_view(), login_url=LOGIN_URL), name="user_edit"),
+    url(r'^accounts/user_edit/$', login_required(UserEdit.as_view(), login_url=LOGIN_URL), name="user_edit"),
 ]

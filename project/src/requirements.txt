@@ -1,4 +1,7 @@
-Django==1.10.2
+autoprefixer==0.1.0
+Django==1.10.3
 django-registration==2.1.2
 gunicorn==19.6.0
+optional-django==0.3.0
 Pillow==3.4.2
+sass==2.3

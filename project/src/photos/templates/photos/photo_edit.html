@@ -3,14 +3,14 @@
 {% block title %} Edit {% endblock %}
 
 {% block content %}
-    <img src='{{ photo.photo.url }}' width="500px">
-    <form method="post"> {% csrf_token %}
-        {{ form.description.errors }}
-        {{ form.description.label_tag }} <br> {{ form.description }} <br>
-        {{ form.category.errors }}
-        {{ form.category.label_tag }} <br> {{ form.category }} <br>
+    <div>
+        <img src='{{ photo.photo.url }}' width="500px">
+        <form method="post"> {% csrf_token %}
+            {{ form.errors }}
+            <b>{{ form.description.label_tag }}</b> <br> {{ form.description }} <br>
+            <b>{{ form.category.label_tag }} </b> <br> {{ form.category }} <br>
 
-        <input type="submit" value="Исправить">
-    </form>
-
+            <input type="submit" value="Исправить">
+        </form>
+    </div>
 {% endblock %}

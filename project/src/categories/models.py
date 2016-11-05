@@ -1,12 +1,12 @@
 # coding: utf-8
 
 from __future__ import unicode_literals
-from django.db.models import Model, CharField, TextField
+from django.db.models import Model, CharField, TextField, SlugField
 from django.urls import reverse
 
 class Category(Model):
     title = CharField(max_length=40, verbose_name=u'Название', blank=False)
-    slug_field = CharField(max_length=15, verbose_name=u'Обозначение', blank=False)
+    short_name = SlugField(max_length=15, verbose_name=u'Обозначение', blank=False)
     description = TextField(max_length=1024, verbose_name=u'Описание', blank=True)
 
 
@@ -18,10 +18,10 @@ class Category(Model):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse('photos:list_category', args=[str(self.slug_field)])
+        return reverse('photos:list_category', args=[str(self.short_name)])
 
     @staticmethod
     def get_categories():
-        return [(category.title, category.slug_field) for category in Category.objects.all()]
+        return [(category.title, category.short_name) for category in Category.objects.all()]
 
 

@@ -26,7 +26,7 @@ SECRET_KEY = '=v6!iu-rd75zna@)@a0ssdfrexkolv376a_q)1pu9^b8ljb=3j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [u'project', u'localhost']
 
 # User model definition
 AUTH_USER_MODEL = 'core.User'

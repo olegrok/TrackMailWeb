@@ -47,7 +47,7 @@ class PhotoCategoryView(PhotoList):
         queryset = super(PhotoCategoryView, self).get_queryset()
         if self.category == 'all':
             return queryset
-        return queryset.filter(category__slug_field=self.category)
+        return queryset.filter(category__short_name=self.category)
 
 
 class PhotoDetail(DetailView):

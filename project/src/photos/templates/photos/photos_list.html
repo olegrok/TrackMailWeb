@@ -2,39 +2,40 @@
 {% block title %}Список фотографий{% endblock %}
 
 {% block content %}
-    <div align="center">
-        <form>
-            {{ search_form.search.errors }}
-            {{ search_form.search.label_tag }} {{ search_form.search }} <br>
-            {{ search_form.sort.label_tag }} {{ search_form.sort }}
-            <input type="submit" value="Искать">
-        </form>
-    </div>
+    <div>
+        <div align="center">
+            <form>
+                {{ search_form.search.errors }}
+                {{ search_form.search.label_tag }} {{ search_form.search }} <br>
+                {{ search_form.sort.label_tag }} {{ search_form.sort }}
+                <input type="submit" value="Искать">
+            </form>
+        </div>
 
 
-    <div align="right">
-        <a href="{% url 'photos:list_category' slug='all' %}"> All </a> <br>
+        <div align="right" style="float:right;"><nav>
+            <a href="{% url 'photos:list_category' slug='all' %}"> All </a> <br>
 
-        {% for x, y in categories %}
-            {% url 'photos:list_category' slug=y as url %}
-            <a href="{{ url }}"> {{ x }} </a>  <br>
-        {% endfor %}
-    </div>
+            {% for x, y in categories %}
+                {% url 'photos:list_category' slug=y as url %}
+                <a href="{{ url }}"> {{ x }} </a>  <br>
+            {% endfor %}
+        </nav>
+        </div>
 
-    <div align="left">
-        {% for photo in object_list %}
-            <p>
-                <a href="{{ photo.author.get_absolute_url }}"> <b>{{ photo.author }}</b> </a>
-                <a href="{{ photo.get_absolute_url }}">
-                    <div><img src="{{ photo.get_file_url }}" width="500px"></div>
-                </a>
-                <br> <br>
-            <div align="right">{{ photo.pub_date|date:'d M Y H:i' }}</div> <br>
-            </p>
-        {% empty %}
-            <h2>Ничего не найдено</h2>
-        {% endfor %}
-
-
+        <div style="float:left;">
+            {% for photo in object_list %}
+                <div>
+                    <a href="{{ photo.author.get_absolute_url }}"> <b>{{ photo.author }}</b> </a> <br>
+                    <a href="{{ photo.get_absolute_url }}">
+                        <img src="{{ photo.get_file_url }}" style="max-height:1000px; max-width: 500px;">
+                    </a> <br>
+                    <div align="right">{{ photo.pub_date|date:'d M Y H:i' }}</div>
+                    <br>
+                </div>
+            {% empty %}
+                <h2>Ничего не найдено</h2>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

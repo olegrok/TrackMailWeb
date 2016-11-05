@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.conf import settings
@@ -28,8 +28,11 @@ class UserEdit(UpdateView):
     fields = ('email', 'first_name', 'last_name', 'avatar')
     slug_field = 'username'
 
-    def get_queryset(self):
-        return User.objects.filter(username=self.request.user.username)
+    def get_object(self, queryset=None):
+        return get_object_or_404(User, pk=self.request.user.pk)
+
+    # def get_queryset(self):
+    #     return User.objects.filter(username=self.request.user.username)
 
 class RegisterView(CreateView):
     model = User
