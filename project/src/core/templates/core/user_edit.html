@@ -35,14 +35,13 @@
     {#        <input type="submit" value="Принять исправления">#}
     {#    </form>#}
 
-    <form method="post" id="user_edit_form" enctype="multipart/form-data"> {% csrf_token %}
         <div id="user-profile-2" class="user-profile tabbable">
             <div class="tab-content row no-border padding-24 col-xs-12">
                 <div class="col-sm-3 center">
                     <img class="editable img-responsive profile-picture" alt="200x200" id="avatar2"
                          src="{{ user.avatar.url }}"
                          style="max-width: 200px; max-height: 200px;">
-                    <button type="submit" class="btn btn-sm btn-block btn-success">
+                    <button type="submit" class="btn btn-sm btn-block btn-success" form="user_edit_form">
                         <i class="ace-icon fa fa-floppy-o bigger-120"></i>
                         <span class="bigger-110">Save</span>
                     </button>
@@ -51,6 +50,7 @@
                 </div><!-- /.col -->
 
                 <div class="col-sm-9">
+                    <form method="post" id="user_edit_form" enctype="multipart/form-data"> {% csrf_token %}
                     <h4 class="blue middle"> {{ user.username }} </h4>
                     <div class="profile-user-info profile-info-row">
                         <div class="profile-info-name"> Имя</div>
@@ -68,6 +68,11 @@
                         <div class="profile-info-name"> Avatar</div>
                         <div class="profile-info-value"> {% render_field form.avatar %} </div>
                     </div>
+                    <div class="profile-user-info profile-info-row">
+                        <div class="profile-info-name"> Password</div>
+                        <a href="{% url 'mainpage:password_change' %}" class="btn btn-outline-warning btn-block btn-default">Изменить пароль</a>
+                    </div>
+                        </form>
                 </div>
 
                 <div class="col-sm-6 widget-header widget-box transparent">
@@ -83,6 +88,6 @@
                 </div>
             </div>
         </div>
-    </form>
+
 
 {% endblock %}

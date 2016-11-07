@@ -9,6 +9,7 @@
 
 
 {% block content %}
+    <div class="container-fluid">
     <div id="blog">
         <article class="blog-post">
             <div class="blog-post-meta"><span class="post-meta-author"><i class="fa fa-user"></i>
@@ -25,19 +26,22 @@
                     <a href="{% url 'photos:photo_edit' pk=photo.id %}">Edit</a></span>
                 {% endif %}
             </div><!--/.blog-post-meta-->
+
             <div class="blog-post-entry markup-format">
-                <p>
                 <div class="img-fluid">
                     <img src="{{ photo.get_file_url }}" width="500px">
                 </div>
+                <hr class="featurette-divider">
                 <div class="blog-post-author clearfix"><img src='{{ photo.author.avatar.url }}'
                                                             class='img-thumbnail avatar ' height='100' width='100'>
                     <h4><a style="color:#333;" href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></h4>
                     <p>{{ photo.description }}</p></div><!--/.blog-post-author.clearfix-->
+                <hr class="featurette-divider">
         </article>
     </div>
 
-    <div class="container-fluid">
+
+    <div>
         {% if form.errors %}
             <h3 class="comment-reply-title">Комментарий не опубликован. Исправьте ошибки:</h3>
             {{ form.errors }}
@@ -97,7 +101,7 @@
 
     </div>
     </div>
-
+    </div>
 
 
 
