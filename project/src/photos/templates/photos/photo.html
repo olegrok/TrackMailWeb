@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-
+{% load widget_tweaks %}
 
 {% block title %}{{ photo.author }}{% endblock %}
 
@@ -8,53 +8,60 @@
 {% block content %}
 
 
-
-    {% if form.errors %}
-        <h3>Комментарий не опубликован. Исправьте ошибки:</h3>
-        {{ form.errors }}
-    {% endif %}
-
-    <img src="{{ photo.get_file_url }}" width="500px"> </br>
-    <p><i>{{ photo.description }}  </i> by <a href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></p>
-
-    {% url 'photos:photo_edit' pk=photo.id as edit_url %}
-    {{ photo.pub_date|date:'H:i d.m.y ' }}
-    {% if user == photo.author %} <a href="{{ edit_url }}">Edit</a> {% endif %}<br>
-
-
-
-    <p>Likes = {{ photo.likes.count }}</p>
-    {% if photo.category %}
-        <div align="center"><b> Category: </b> <a href="{{ photo.category.get_absolute_url }}" >{{ photo.category }} </a> </div>
-    {% endif %}
-
-    {% if photo.get_comments.all %}
-        <h1> Comments: </h1> <br>
-
-        {% for comment in photo.get_comments.all %}
-            <b> <a href="{{ comment.author.get_absolute_url }}"> {{ comment.author.username }}</a>: </b>  <br>
-            <p>{{ comment.text }}</p>
-            <i>{{ comment.pub_date }}</i> <br><br>
-        {% endfor %}
-    {% endif %}
-
-    {% if user.is_authenticated %}
-        <form method="post">
-        {% csrf_token %}
+    <divc class="container">
         {% if form.errors %}
-            {% for field_name, errorlist in form.errors.items %}
-                <div>Ошибки в поле {{ field_name }}: {% for error in errorlist %}{{ error }}{% endfor %}</div>
-            {% endfor %}
+            <h3>Комментарий не опубликован. Исправьте ошибки:</h3>
+            {{ form.errors }}
         {% endif %}
+        <div class="img-fluid">
+            <img src="{{ photo.get_file_url }}" width="500px"> </br>
+            <p><i>{{ photo.description }}  </i> by <a
+                    href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></p>
 
-        <b>Добавить комментарий</b> <br>
+            {% url 'photos:photo_edit' pk=photo.id as edit_url %}
+            {{ photo.pub_date|date:'H:i d.m.y' }}
+            {% if user == photo.author %} <a href="{{ edit_url }}">Edit</a> {% endif %}<br>
 
-        {{ comment_form.label_tag }} <br>
-        {{ comment_form.comment }} <br>
-        <input type="submit" value="Send">
 
-    {% else %}
-        <b>Авторизуйтесь, чтобы добавлять комментарии</b>
-    {% endif %}
-</form>
+            <p>Likes = {{ photo.likes.count }}</p>
+            {% if photo.category %}
+                <div align="center"><b> Category: </b> <a
+                        href="{{ photo.category.get_absolute_url }}">{{ photo.category }} </a></div>
+            {% endif %}
+        </div>
+        <div>
+            {% if photo.get_comments.all %}
+                <h1> Comments: </h1> <br>
+
+                {% for comment in photo.get_comments.all %}
+                    <b> <a href="{{ comment.author.get_absolute_url }}"> {{ comment.author.username }}</a>: </b>  <br>
+                    <p>{{ comment.text }}</p>
+                    <i>{{ comment.pub_date }}</i> <br><br>
+                {% endfor %}
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                    {% for field_name, errorlist in form.errors.items %}
+                        <div>Ошибки в поле {{ field_name }}: {% for error in errorlist %}{{ error }}{% endfor %}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <b>Добавить комментарий</b> <br>
+
+                {{ comment_form.label_tag }} <br>
+                {#        class="form-control"#}
+                {% render_field comment_form.comment class+='form-contol' rows=3 %} <br>
+
+                {#        {{ comment_form.comment }} <br>#}
+                <input type="submit" value="Send" class="btn btn-secondary">
+
+            {% else %}
+                <b>Авторизуйтесь, чтобы добавлять комментарии</b>
+            {% endif %}
+            </form>
+        </div>
+    </divc>
 {% endblock %}

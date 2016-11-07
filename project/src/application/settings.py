@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'likes',
     'photos',
     'comments',
-    'categories'
+    'categories',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [

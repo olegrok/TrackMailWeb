@@ -1,69 +1,83 @@
 <!DOCTYPE html>
 <html lang="ru">
-{% load staticfiles %}
+
 <head>
     <title>{% block title %}Hello!{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-flex.css' %}"
+
+    {% load staticfiles %}
+    {% load widget_tweaks %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-flex.css' %}">
+    {% block head %} {% endblock %}
 </head>
 
-<body>
-
-    <nav class="navbar navbar-dark navbar-fixed-top bg-inverse">
-      <button type="button" class="navbar-toggler hidden-sm-up" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation"></button>
-      <a class="navbar-brand" href="/">Photyshestvie</a>
-      <div id="navbar">
+<body style="padding-top: 60px;">
+<nav class="navbar navbar-dark bg-inverse navbar-fixed-top">
+    <button type="button" class="navbar-toggler hidden-sm-up" data-toggle="collapse"
+            data-target=".bs-js-navbar-scrollspy"
+            aria-expanded="false" aria-controls="navbar" aria-label="Navigation"></button>
+    <a class="navbar-brand" href="/">Photyshestvie</a>
+    <div id="navbar">
         <nav class="nav navbar-nav">
-        <div class="float-xs-left">
-          <a class="nav-item nav-link" href="{% url 'photos:list' %}">Фотокарточки</a>
-{#          <a class="nav-item nav-link" href="#">Settings</a>#}
-          {% if user.is_authenticated %}
-              <a class="nav-item nav-link" href="{% url 'photos:create_photo'%}">Добавить фото</a>
-              <a class="nav-item nav-link" href="{{ user.get_absolute_url }}">Профиль</a>
-          {% else %}
-              <a class="nav-item nav-link" href="{% url 'mainpage:login' %}">Авторизация</a>
-              <a class="nav-item nav-link" href="{% url 'mainpage:register' %}">Регистрация</a>
-          {% endif %}
+            <div class="float-xs-left">
+                <a class="nav-item nav-link" href="{% url 'photos:list' %}">Фотокарточки</a>
+                {#          <a class="nav-item nav-link" href="#">Settings</a>#}
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'photos:create_photo' %}">Добавить фото</a>
+                    <a class="nav-item nav-link" href="{{ user.get_absolute_url }}">Профиль</a>
+                {% else %}
+                    <a class="nav-item nav-link" href="{% url 'mainpage:login' %}">Авторизация</a>
+                    <a class="nav-item nav-link" href="{% url 'mainpage:register' %}">Регистрация</a>
+                {% endif %}
 
-        </div>
-        <div class="float-xs-right">
-            {% if user.is_authenticated %}
-            <a class="nav-item nav-link" href="{% url 'mainpage:logout' %}">Выйти из аккаунта</a>
-            {% else %}
-                <form action="{% url 'mainpage:login' %}" method="post" next='{{ request.path }}'> {% csrf_token %}
-                    <span style="color:white;">{{ authform.username.label_tag }} </span> {{ authform.username }}
-                    <span style="color:white;">{{ authform.password.label_tag }} </span> {{ authform.password }}
-                    <input type="hidden" id='id_next' name='next' value='{{ request.path }}'>
-                    <input type="submit" value="Войти" class='btn btn-primary'>
-                </form>
-            {% endif %}
-        </div>
-{#          <a class="nav-item nav-link" href="#">Help</a>#}
+            </div>
+            <div class="float-xs-right form-inline form-group-sm">
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'mainpage:logout' %}">Выйти из аккаунта</a>
+                {% else %}
+                    <form action="{% url 'mainpage:login' %}" method="post"> {% csrf_token %}
+                        <label class="sr-only"
+                               style="color:white;">{{ authform.username.label_tag }} </label>{% render_field authform.username placeholder='Username' %}
+                        <label class="sr-only"
+                               style="color:white;">{{ authform.password.label_tag }} </label> {% render_field authform.password placeholder='Password' %}
+                        <input type="hidden" id='id_next' name='next' value='{{ request.path }}'>
+                        <input type="submit" value="Войти" class='btn btn-primary btn-sm'>
+                    </form>
+                {% endif %}
+            </div>
+            {#          <a class="nav-item nav-link" href="#">Help</a>#}
         </nav>
+        {#        <form class="float-xs-right">#}
+        {#          <input type="text" class="form-control" placeholder="Search...">#}
+        {#        </form>#}
+    </div>
+</nav>
 
-
-{#        <form class="float-xs-right">#}
-{#          <input type="text" class="form-control" placeholder="Search...">#}
-{#        </form>#}
-      </div>
-    </nav>
-
-</div> <br><br><br>
+{#<br><br><br>#}
 {#<a href="/"><h1><i>Photyshestvie</i></h1></a>#}
 
-{#{% include 'core/registration/login_panel.html' %}#}
+{% block content %}{% endblock %}
 
-<div>
-    {% block content %}{% endblock %}
-</div>
+    <footer style="text-align: center; padding: 0.25rem 0; border-top: .05rem solid #e5e5e5; margin-bottom: 0px;">
+      <p>Footer</p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </footer>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="{% static  'bootstrap/js/bootstrap.min.js' %}"
-        integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7"
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+        integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js"
+        integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"
+        integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK"
         crossorigin="anonymous"></script>
 </body>
 <!--<h1>END</h1> -->

@@ -1,13 +1,23 @@
 {% extends 'core/base.html' %}
 {% block title %} Новое фото {% endblock %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block head %}<link rel="stylesheet" href="{% static 'signin.css' %} "> {% endblock %}
+
 
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for field in form %}
-            {{ field.errors }}
-            <b>{{ field.label_tag }} </b> <br> {{ field }} <br>
-        {% endfor %}
-        <input type="submit" value="Загрузить">
-    </form>
+    <div class="container page">
+        <form method="post" enctype="multipart/form-data" class="form-control-file"> {% csrf_token %}
+            <h2 class="form-signin-heading">Загрузка фотокарточки</h2>
+            {% if form.errors %}
+                <p class="error">Пожалуйста исправьте нижеприведённые ошибки.</p>
+            {% endif %}
+            {% for field in form %}
+                <label class="sr-only">{{ field.label }}</label>
+                {% render_field field placeholder=field.label class+='form-control' %}
+            {% endfor %}
+            <input class="btn btn-lg btn-secondary" type="submit" value="Отправить">
+        </form>
+    </div>
+
 {% endblock %}

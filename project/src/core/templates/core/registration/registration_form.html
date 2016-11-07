@@ -1,21 +1,29 @@
 {% extends "core/base.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'signin.css' %} "> {% endblock %}
 
 {% block title %}Регистрация пользователя{% endblock %}
 
 {% block content %}
-    <div>
+    <div class="container">
         {% if user.is_anonymous %}
-            <h1>Регистрация пользователя</h1>
-
-            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+            <form method="post" enctype="multipart/form-data" class="form-signin"> {% csrf_token %}
+                <h2 class="form-signin-heading">Регистрация</h2>
                 {% if form.errors %}
                     <p class="error">Пожалуйста исправьте нижеприведённые ошибки.</p>
                 {% endif %}
-                <table>{{ form.as_table }}</table>
-                <input type="submit" value="Зарегистрироваться"/>
+                {% for field in form %}
+                    <label class="sr-only">{{ field.label }}</label>
+                    {% render_field field placeholder=field.label class+='form-control' %}
+                {% endfor %}
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Зарегистрироваться">
             </form>
         {% else %}
-            <h1>Вы уже зарегистрированы и авторизованы</h1>
+            <h2 class="form-signin-heading"><br> Вы уже зарегистрированы и авторизованы</h2>
         {% endif %}
     </div>
+
+
 {% endblock %}

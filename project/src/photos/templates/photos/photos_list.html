@@ -1,41 +1,55 @@
 {% extends "core/base.html" %}
+{% load widget_tweaks %}
+
 {% block title %}Список фотографий{% endblock %}
 
 {% block content %}
-    <div>
-        <div align="center">
+
+    <div class="container-fluid">
+    <div class="col-xs-12 col-sm-9">
+        {% for photo in object_list %}
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 {% cycle 'push-md-5' ' ' %}">
+                    <h2 class="featurette-heading"><a
+                            href="{{ photo.author.get_absolute_url }}"> {{ photo.author }} </a></h2>
+                    <p class="lead">{{ photo.description }}</p>
+                    <h6 class="text-muted"> {{ photo.pub_date|date:'d M Y H:i' }}</h6>
+                </div>
+                <div class="col-md-5 {% cycle 'pull-md-7' ' ' %}">
+                    <a href="{{ photo.get_absolute_url }}"><img class="featurette-image img-fluid mx-auto"
+                                                                src="{{ photo.get_file_url }}"
+                                                                alt="Generic placeholder image"></a>
+                </div>
+            </div>
+            {% empty %}
+            <h2 class="featurette-heading">Ничего не найдено</h2>
+        {% endfor %}
+
+    </div>
+
+    <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <div align="center" style="margin-bottom: 15px;" class="form-inline container">
+            <hr class="featurette-divider">
             <form>
                 {{ search_form.search.errors }}
-                {{ search_form.search.label_tag }} {{ search_form.search }} <br>
-                {{ search_form.sort.label_tag }} {{ search_form.sort }}
-                <input type="submit" value="Искать">
+                {{ search_form.search.label_tag }} {% render_field search_form.search class+='form-contol' placeholder='Поиск' %} <br>
+                {{ search_form.sort.label_tag }} <br> {% render_field search_form.sort class+='form_control' %} <br>
+                <input type="submit" value="Искать" class="btn btn-secondary btn-sm" role="button" style="margin-top: 7px;">
             </form>
         </div>
-
-
-        <div align="right" style="float:right;"><nav>
-            <a href="{% url 'photos:list_category' slug='all' %}"> All </a> <br>
-
+        <div class="list-group">
+            <a href="{% url 'photos:list_category' slug='all' %}" class='list-group-item list-group-item-info'> All </a>
             {% for x, y in categories %}
                 {% url 'photos:list_category' slug=y as url %}
-                <a href="{{ url }}"> {{ x }} </a>  <br>
-            {% endfor %}
-        </nav>
-        </div>
+                {% if url == request.path %}
+                    <a href="{{ url }}" class="list-group-item active"> {{ x }} </a>
+                {% else %}
+                    <a href="{{ url }}" class="list-group-item"> {{ x }} </a>
+                {% endif %}
 
-        <div style="float:left;">
-            {% for photo in object_list %}
-                <div>
-                    <a href="{{ photo.author.get_absolute_url }}"> <b>{{ photo.author }}</b> </a> <br>
-                    <a href="{{ photo.get_absolute_url }}">
-                        <img src="{{ photo.get_file_url }}" style="max-height:1000px; max-width: 500px;">
-                    </a> <br>
-                    <div align="right">{{ photo.pub_date|date:'d M Y H:i' }}</div>
-                    <br>
-                </div>
-            {% empty %}
-                <h2>Ничего не найдено</h2>
             {% endfor %}
         </div>
+    </div>
     </div>
 {% endblock %}

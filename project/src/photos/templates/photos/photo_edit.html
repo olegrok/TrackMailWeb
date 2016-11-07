@@ -3,7 +3,7 @@
 {% block title %} Edit {% endblock %}
 
 {% block content %}
-    <div>
+    <div class="container">
         <img src='{{ photo.photo.url }}' width="500px">
         <form method="post"> {% csrf_token %}
             {{ form.errors }}
