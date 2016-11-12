@@ -17,6 +17,8 @@ class PhotoList(ListView):
     model = Photo
     template_name = 'photos/photos_list.html'
     context_object_name = 'photo'
+    paginate_by = 15
+
 
     def dispatch(self, request, *args, **kwargs):
         self.search_form = SearchForm(request.GET)
