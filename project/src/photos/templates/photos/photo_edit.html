@@ -1,16 +1,13 @@
-{% extends 'core/base.html' %}
+<div class="container-fluid">
+    <img src='{{ photo.photo.url }}' width="500px">
+    <form method="post" action="{% url 'photos:photo_edit' pk=photo.pk %}" class="ajax-post-edit-form"> {% csrf_token %}
+        {{ form.errors }}
+        <b>{{ form.description.label_tag }}</b> <br> {{ form.description }} <br>
+        <b>{{ form.category.label_tag }} </b> <br> {{ form.category }} <br>
 
-{% block title %} Edit {% endblock %}
-
-{% block content %}
-    <div class="container">
-        <img src='{{ photo.photo.url }}' width="500px">
-        <form method="post"> {% csrf_token %}
-            {{ form.errors }}
-            <b>{{ form.description.label_tag }}</b> <br> {{ form.description }} <br>
-            <b>{{ form.category.label_tag }} </b> <br> {{ form.category }} <br>
-
-            <input type="submit" value="Исправить">
-        </form>
-    </div>
-{% endblock %}
+        <div class="btn-group" style="margin-top: 1em;">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        </div>
+    </form>
+</div>

@@ -11,14 +11,14 @@ class RegistrationForm(UserCreationForm):
 
     def clean_username(self):
         try:
-            User.objects.get(username__iexact=self.cleaned_data['username'])
+            get(username__iexact=self.cleaned_data['username'])
         except User.DoesNotExist:
             return self.cleaned_data['username']
         raise forms.ValidationError("The username already exists. Please try another one.")
 
     def clean_email(self):
         try:
-            User.objects.get(email__iexact=self.cleaned_data['email'])
+            get(email__iexact=self.cleaned_data['email'])
         except User.DoesNotExist:
             return self.cleaned_data['email']
         raise forms.ValidationError("This e-mail is already used.")

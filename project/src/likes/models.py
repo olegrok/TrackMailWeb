@@ -10,6 +10,7 @@ from django.conf import settings
 class Like(models.Model):
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='his_likes', verbose_name='Владелец')
     photo = ForeignKey('photos.Photo', related_name='likes', verbose_name='Фотокарточка')
+
     class Meta:
         unique_together = (('author', 'photo'),)
         verbose_name = 'Like'

@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="{% static 'photo_list.css' %} ">
 {% endblock %}
 
+{% block scripts %}
+    <script src="{% static 'js/like-list.js' %}"></script> {% endblock %}
 
 {% block title %}Список фотографий{% endblock %}
 
@@ -25,7 +27,10 @@
                     {% endif %}
                     <span class="post-meta-comments"><i class="fa fa-comment-o"></i>
                     <a class="meta-comments">{{ photo.get_comments.all.count }} comments</a></span>
-                    <span class="post-meta-likes"><i class="fa fa-heart-o"></i> {{ photo.likes.count }} likes</span>
+                    <span class="post-meta-likes"><i class="fa fa-heart-o like"
+                                                     data-likes-url="{% url 'photos:photo_likes' pk=photo.pk %}"
+                                                     data-photo-id="{{ photo.pk }}"></i> <span class="likes-count"
+                                                                                               data-photo-id="{{ photo.pk }}">{{ photo.likes.count }}</span> likes</span>
                     {% if user == photo.author %}<span class="post-meta-editbutton"><i class="fa fa-pencil"></i>
                     <a href="{% url 'photos:photo_edit' pk=photo.id %}">Edit</a></span>
                     {% endif %}
@@ -118,5 +123,4 @@
             {% endif %}
         </ul>
     </div>
-
 {% endblock %}

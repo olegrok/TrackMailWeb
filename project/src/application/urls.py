@@ -22,7 +22,6 @@ urlpatterns = [
     url(r'^photos/', include('photos.urls', namespace='photos')),
     url(r'^', include('core.urls', namespace='mainpage')),
     url(r'^admin/', admin.site.urls),
-
 ]
 
 if __debug__ :

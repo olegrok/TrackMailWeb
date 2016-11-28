@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from categories.models import Category
 
+
 class Photo(Model):
     photo = ImageField(upload_to='photos/', blank=False, null=False, verbose_name='Фотокарточка')
     description = TextField(max_length=1024, blank=True, verbose_name='Описание')
@@ -22,13 +23,18 @@ class Photo(Model):
 
     def __str__(self):
         return str(self.id)
+
     def likes(self):
         return self.likes
+
     def get_comments(self):
         return self.comments
+
     def get_absolute_url(self):
         return reverse('photos:photo', args=[str(self.pk)])
+
     def get_edit_url(self):
         return reverse('photos:photo_edit', args=[str(self.pk)])
+
     def get_file_url(self):
         return self.photo.url
