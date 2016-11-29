@@ -50,9 +50,6 @@ $(document).ready(function () {
             if (data == 'OK') {
                 document.location.href = document.location.href;
             }
-            // else {
-            //
-            // }
             form.html(data);
         });
     });

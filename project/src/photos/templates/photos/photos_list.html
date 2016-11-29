@@ -11,6 +11,7 @@
 {% block title %}Список фотографий{% endblock %}
 
 {% block content %}
+    {% include 'photos/photo_edit_dialog.html' %}
 
     <div class="container-fluid">
         <div class="col-xs-12 col-sm-9">
@@ -32,7 +33,7 @@
                                                      data-photo-id="{{ photo.pk }}"></i> <span class="likes-count"
                                                                                                data-photo-id="{{ photo.pk }}">{{ photo.likes.count }}</span> likes</span>
                     {% if user == photo.author %}<span class="post-meta-editbutton"><i class="fa fa-pencil"></i>
-                    <a href="{% url 'photos:photo_edit' pk=photo.id %}">Edit</a></span>
+                    <a href="{% url 'photos:photo_edit' pk=photo.id %}" class="edit-post-link">Edit</a></span>
                     {% endif %}
                     <span class="post-meta-show"><i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                     <a href="{{ photo.get_absolute_url }}">Смотреть</a></span>

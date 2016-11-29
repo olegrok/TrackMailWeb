@@ -7,20 +7,23 @@ from django.conf import settings
 from django.http import request, HttpResponseRedirect
 from django.template import RequestContext
 from django.urls import reverse
+from photos.models import Photo
 
 from .models import User
 from .forms import RegistrationForm
+
 
 class UserView(DetailView):
     model = User
     template_name = 'core/user.html'
     slug_field = 'username'
     context_object_name = 'user_account'
-    
+
     def get_context_data(self, **kwargs):
         context = super(UserView, self).get_context_data(**kwargs)
         context['profile'] = self.request.user
         return context
+
 
 class UserEdit(UpdateView):
     model = User
@@ -31,8 +34,9 @@ class UserEdit(UpdateView):
     def get_object(self, queryset=None):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    # def get_queryset(self):
-    #     return User.objects.filter(username=self.request.user.username)
+        # def get_queryset(self):
+        #     return User.objects.filter(username=self.request.user.username)
+
 
 class RegisterView(CreateView):
     model = User
@@ -43,5 +47,7 @@ class RegisterView(CreateView):
     def get_success_url(self):
         return reverse(self.success_url)
 
+
 def home(request):
-    return render(request, 'core/home.html')
+    popular_photos = Photo.objects.all().order_by('likes')[:10];
+    return render(request, context={'photos_list': popular_photos}, template_name='core/home.html')

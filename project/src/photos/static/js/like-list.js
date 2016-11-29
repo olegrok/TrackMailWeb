@@ -61,5 +61,21 @@ $(document).ready(function () {
         });
     });
 
+    $('.edit-post-link').click(function () {
+        $('#exampleModal').modal();
+        $('.modal-body').load($(this).attr('href'));
+        return false;
+    });
+
+    $(document).on('submit', '.ajax-post-edit-form', function () {
+        var form = $(this);
+        $.post(form.attr('action'), form.serialize(), function (data) {
+            if (data == 'OK') {
+                document.location.href = document.location.href;
+            }
+            form.html(data);
+        });
+    });
+
     window.setInterval(updateLikes, 5000);
 });
