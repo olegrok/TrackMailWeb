@@ -24,6 +24,11 @@ class UserView(DetailView):
         context['profile'] = self.request.user
         return context
 
+    def get_queryset(self):
+        queryset = super(UserView, self).get_queryset()
+        queryset = queryset.prefetch_related('photos')
+        return queryset
+
 
 class UserEdit(UpdateView):
     model = User

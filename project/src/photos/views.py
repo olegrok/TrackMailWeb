@@ -70,10 +70,10 @@ class PhotoList(ListView):
         if self.search_form.is_valid():
             query = self.search_form.cleaned_data['search']
             queryset = queryset.filter(Q(description__icontains=query) | Q(author__username__iexact=query))
-            queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
-            queryset = queryset.select_related('author', 'category')
-            queryset = queryset.annotate(likes_count=models.Count('likes')). \
-            queryset = queryset.annotate(comments_count=models.Count('comments'))
+        queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
+        queryset = queryset.select_related('author', 'category')
+        queryset = queryset.annotate(likes_count=models.Count('likes')). \
+        queryset = queryset.annotate(comments_count=models.Count('comments'))
         return queryset
 
     def get_context_data(self, **kwargs):
