@@ -1,6 +1,8 @@
 {% extends "core/base.html" %}
 {% load widget_tweaks %}
 {% load staticfiles %}
+{% load cache %}
+
 {% block head %}
     <link rel="stylesheet" href="{% static 'photo_list.css' %} ">
 {% endblock %}
@@ -17,7 +19,6 @@
         <div class="col-xs-12 col-sm-9">
             {% for photo in object_list %}
                 <hr class="featurette-divider">
-
                 <div class="blog-post-meta"><span class="post-meta-author"><i class="fa fa-user"></i>
                 <a href="{{ photo.author.get_absolute_url }}">{{ photo.author }}</a></span>
                     <span class="post-meta-time"><i
