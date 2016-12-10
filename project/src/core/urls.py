@@ -4,10 +4,11 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout, password_change
 from django.contrib.auth.decorators import login_required
 from application.settings import LOGIN_URL
-
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
-    url(r'^$', home, name='home'),
+    # url(r'^$', home, name='home'),
+    url(r'^$', cache_page(3600)(home), name='home'),
     url(r'^accounts/logout/$', login_required(logout, login_url=LOGIN_URL), {'next_page' : '/'}, name='logout'),
     url(r'^accounts/login/$', login,{'template_name' : 'core/registration/login.html',
                                      'redirect_authenticated_user': True,

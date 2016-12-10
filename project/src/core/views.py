@@ -49,5 +49,6 @@ class RegisterView(CreateView):
 
 
 def home(request):
-    popular_photos = Photo.objects.all().order_by('likes')[:10];
+    popular_photos = Photo.objects.all().order_by('likes')[:5]
+    popular_photos = popular_photos.select_related('author')
     return render(request, context={'photos_list': popular_photos}, template_name='core/home.html')

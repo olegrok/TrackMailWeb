@@ -25,11 +25,11 @@
                     <a href="{{ photo.category.get_absolute_url }}">{{ photo.category }}</a></span>
                         {% endif %}
                         <span class="post-meta-comments"><i class="fa fa-comment-o"></i>
-                    <a class="meta-comments">{{ photo.get_comments.all.count }} comments</a></span>
+                    <a class="meta-comments">{{ comments_count }} comments</a></span>
                         <span class="post-meta-likes"><i class="fa fa-heart-o like"
                                                          data-likes-url="{% url 'photos:photo_likes' pk=photo.pk %}"
                                                          data-photo-id="{{ photo.pk }}"></i> <span class="likes-count"
-                                                                                                   data-photo-id="{{ photo.pk }}">{{ photo.likes.count }}</span> likes</span>
+                                                                                                   data-photo-id="{{ photo.pk }}">{{ likes_count }}</span> likes</span>
                         {% if user == photo.author %}<span class="post-meta-editbutton"><i class="fa fa-pencil"></i>
                     <a href="{% url 'photos:photo_edit' pk=photo.id %}" class="edit-post-link">Edit</a></span>
                         {% endif %}

@@ -1,8 +1,9 @@
 autoprefixer==0.1.0
 BeautifulSoup==3.2.1
-Django==1.10.3
+Django==1.10.4
 django-bootstrap==0.2.4
 django-crispy-forms==1.6.1
+django-debug-toolbar==1.6
 django-mptt==0.8.6
 django-mptt-tree-editor==0.1.2
 django-registration==2.1.2
@@ -10,10 +11,13 @@ django-widget-tweaks==1.4.1
 gunicorn==19.6.0
 msgpack-python==0.4.8
 numpy==1.11.2
+opencv-python==3.1.0.3
 optional-django==0.3.0
 Pillow==3.4.2
+python-memcached==1.58
 PyYAML==3.12
 sass==2.3
 six==1.10.0
+sqlparse==0.2.2
 tarantool==0.5.4
-virtualenv==15.0.3
+virtualenv==15.1.0

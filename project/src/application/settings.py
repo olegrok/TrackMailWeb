@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'photos',
     'comments',
     'categories',
-    'widget_tweaks'
+    'widget_tweaks',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'application.urls'
@@ -90,6 +92,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -143,3 +151,6 @@ MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media/')
 LOGIN_REDIRECT_URL = "mainpage:home"
 LOGIN_URL = "mainpage:login"
 ACCOUNT_ACTIVATION_DAYS = 1
+
+# Debug toolbar
+INTERNAL_IPS = '127.0.0.1'

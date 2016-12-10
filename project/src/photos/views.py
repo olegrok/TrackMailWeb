@@ -4,6 +4,10 @@ from django.shortcuts import get_object_or_404, reverse, redirect, HttpResponse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, View
 from django.http import HttpResponseRedirect, JsonResponse, Http404
 from django.contrib.auth.views import redirect_to_login
+from django.db.models import Q, Count
+from django.db import models
+# from django.utils.cache import caches
+# cache = caches['default']
 
 from application.settings import LOGIN_URL
 from comments.forms import CommentForm
@@ -22,7 +26,8 @@ class PhotoLikesCount(View):
         return super(PhotoLikesCount, self).dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        return JsonResponse({'likes': self.photo.likes.count(), 'liked': self.photo.likes.filter(author__exact=request.user).count() > 0})
+        return JsonResponse({'likes': self.photo.likes.count(),
+                             'liked': self.photo.likes.filter(author__exact=request.user).count() > 0})
 
     def post(self, request):
         if request.user.is_anonymous:
@@ -63,8 +68,12 @@ class PhotoList(ListView):
     def get_queryset(self):
         queryset = Photo.objects.all()
         if self.search_form.is_valid():
-            queryset = queryset.filter(description__icontains=self.search_form.cleaned_data['search'])
+            query = self.search_form.cleaned_data['search']
+            queryset = queryset.filter(Q(description__icontains=query) | Q(author__username__iexact=query))
             queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
+            queryset = queryset.select_related('author', 'category')
+            queryset = queryset.annotate(likes_count=models.Count('likes')). \
+            queryset = queryset.annotate(comments_count=models.Count('comments'))
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -76,6 +85,7 @@ class PhotoList(ListView):
 
 class PhotoCategoryView(PhotoList):
     slug_field = 'category'
+    category = None
 
     def dispatch(self, request, *args, **kwargs):
         self.category = kwargs['slug']
@@ -106,6 +116,13 @@ class PhotoDetail(DetailView):
         context = super(PhotoDetail, self).get_context_data(**kwargs)
         context['comment_form'] = self.comment_form
         return context
+
+    def get_queryset(self):
+        queryset = super(PhotoDetail, self).get_queryset()
+        queryset.aggregate(comments_count=Count('comments'), likes_count=Count('likes'))
+        queryset = queryset.prefetch_related('comments__author')
+        queryset = queryset.select_related('author', 'category')
+        return queryset
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -149,7 +166,7 @@ class EditPhoto(UpdateView):
     def form_valid(self, form):
         response = super(EditPhoto, self).form_valid(form)
         return HttpResponseRedirect(self.get_success_url())
-    #     return JsonResponse({'status': 'OK'})
-    #
-    # def form_invalid(self, form):
-    #     return JsonResponse({'status': 'FAIL', 'errors': form.errors.as_json()})
+        #     return JsonResponse({'status': 'OK'})
+        #
+        # def form_invalid(self, form):
+        #     return JsonResponse({'status': 'FAIL', 'errors': form.errors.as_json()})
