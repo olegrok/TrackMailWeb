@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from categories.models import Category
+from qsmanage import PhotosQuerySet
 
 
 class Photo(Model):
@@ -15,6 +16,8 @@ class Photo(Model):
     author = ForeignKey(settings.AUTH_USER_MODEL, related_name='photos', verbose_name='Автор')
     comments = GenericRelation('comments.Comment', related_query_name='comments', verbose_name='Отзывы')
     category = ForeignKey(Category, related_name='photos', verbose_name='Категория', blank=True, null=True)
+
+    objects = PhotosQuerySet.as_manager()
 
     class Meta:
         verbose_name = u'Фотокарточка'

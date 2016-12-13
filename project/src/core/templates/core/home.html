@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-    {% cache 3600 "homepage" %}
+{#    {% cache 3600 "homepage" %}#}
     <a href="{% url 'photos:list' %}"><h1>Django. It works!</h1></a>
     <div class="container-fluid">
         <div id="ca-container" class="ca-container">
@@ -47,6 +47,6 @@
             </div>
         </div>
     </div>
-    {% endcache %}
+{#    {% endcache %}#}
 {% endblock %}
 

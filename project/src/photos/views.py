@@ -58,7 +58,7 @@ class PhotoList(ListView):
     model = Photo
     template_name = 'photos/photos_list.html'
     context_object_name = 'photo'
-    paginate_by = 15
+    paginate_by = 5
     search_form = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -71,9 +71,7 @@ class PhotoList(ListView):
             query = self.search_form.cleaned_data['search']
             queryset = queryset.filter(Q(description__icontains=query) | Q(author__username__iexact=query))
         queryset = queryset.order_by(self.search_form.cleaned_data['sort'])
-        queryset = queryset.select_related('author', 'category')
-        queryset = queryset.annotate(likes_count=models.Count('likes')). \
-        queryset = queryset.annotate(comments_count=models.Count('comments'))
+        queryset = queryset.select_related('author', 'category').shown_list()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -103,12 +101,10 @@ class PhotoDetail(DetailView):
     context_object_name = 'photo'
     template_name = 'photos/photo.html'
     success_url = '.'
-    user = None
     comment_form = None
     object = None
 
     def dispatch(self, request, *args, **kwargs):
-        self.user = request.user
         self.comment_form = CommentForm
         return super(PhotoDetail, self).dispatch(request, *args, **kwargs)
 
@@ -118,11 +114,7 @@ class PhotoDetail(DetailView):
         return context
 
     def get_queryset(self):
-        queryset = super(PhotoDetail, self).get_queryset()
-        queryset.aggregate(comments_count=Count('comments'), likes_count=Count('likes'))
-        queryset = queryset.prefetch_related('comments__author')
-        queryset = queryset.select_related('author', 'category')
-        return queryset
+        return super(PhotoDetail, self).get_queryset().shown_detail()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

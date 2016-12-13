@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.conf import settings
 from django.http import request, HttpResponseRedirect
 from django.template import RequestContext
+from django.db.models import Count
 from django.urls import reverse
 from photos.models import Photo
 
@@ -54,6 +55,6 @@ class RegisterView(CreateView):
 
 
 def home(request):
-    popular_photos = Photo.objects.all().order_by('likes')[:5]
+    popular_photos = Photo.objects.all().annotate(likes_count=Count('likes')).order_by('-likes_count')[:5]
     popular_photos = popular_photos.select_related('author')
     return render(request, context={'photos_list': popular_photos}, template_name='core/home.html')
